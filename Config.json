@@ -1,0 +1,6 @@
+﻿{
+  "symbol": "BTCUDT",
+  "interval": "5m",
+  "cacheType": "File",
+  "cachePath": "data/binance/cache"
+}
