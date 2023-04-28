@@ -17,7 +17,7 @@ namespace App.Entity
 
         public Candle()
         {
-        }
 
+        }
     }
 }

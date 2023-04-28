@@ -9,7 +9,7 @@ namespace App.Entity
     {
         public string Interval { get; set; }
         public string Symbol { get; set; }
-        public CacheType CacheType { get; set; }
+        public ECacheType CacheType { get; set; }
         public string CachePath { get; set; }
         
 
@@ -28,7 +28,7 @@ namespace App.Entity
             try
             {
                 string stringCacheType = config.cacheType ?? "None";
-                this.CacheType = Enum.Parse<CacheType>(stringCacheType);
+                this.CacheType = Enum.Parse<ECacheType>(stringCacheType);
             }
             catch (Exception)
             {
@@ -38,7 +38,7 @@ namespace App.Entity
             this.Symbol = config.symbol;
         }
 
-        public static Config getInstance()
+        public static Config GetInstance()
         {
             if (_instance == null)
                 _instance = new Config();
@@ -48,7 +48,7 @@ namespace App.Entity
         public void debugConfig()
         {
             Console.WriteLine("Config:");
-            Console.WriteLine("interval: " + this.Interval);
+            Console.WriteLine("Interval: " + this.Interval);
             Console.WriteLine("CacheType: " + this.CacheType);
             Console.WriteLine("CachePath: " + this.CachePath);
             Console.WriteLine("Symbol: " + this.Symbol);

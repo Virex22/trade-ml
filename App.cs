@@ -1,4 +1,5 @@
-﻿using App.Entity;
+﻿using App.Core;
+using App.Entity;
 using App.Provider;
 using Newtonsoft.Json;
 using System;
@@ -13,9 +14,8 @@ namespace App
     {
        public void Run()
         {
-            Config config = Config.getInstance();
-            config.debugConfig();
-
+            DecisionMaker decisionMaker = new DecisionMaker();
+            TestingDataSet dataSet = new TestingDataSet();  
         }
     }
 }
