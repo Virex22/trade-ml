@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace App.Enumerator
 {
-    public enum CacheType
+    public enum ECacheType
     {
         None,
         File,

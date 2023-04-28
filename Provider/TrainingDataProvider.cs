@@ -20,10 +20,10 @@ namespace App.Provider
         /**
          * get random day candles values from 00:00 to 23:59
          */
-        public List<Candle> getRandomDayCandleValue()
+        public List<Candle> getRandomDayCandleValue(int maxHistoriqueDay = 365)
         {
             Random random = new Random();                      
-            DateTimeOffset day = DateTimeOffset.Now.AddDays(Convert.ToDouble(random.Next(1, 1000) * -1));
+            DateTimeOffset day = DateTimeOffset.Now.AddDays(Convert.ToDouble(random.Next(1, maxHistoriqueDay) * -1));
             DateTimeOffset start_timestamp = new DateTimeOffset(day.Year, day.Month, day.Day, 0, 0, 0, TimeSpan.Zero);
             DateTimeOffset end_timestamp = new DateTimeOffset(day.Year, day.Month, day.Day, 23, 59, 59, TimeSpan.Zero);
 
@@ -34,7 +34,7 @@ namespace App.Provider
 
         private string buildUrl(DateTimeOffset start_timestamp, DateTimeOffset end_timestamp)
         {
-            Config config = Config.getInstance();
+            Config config = Config.GetInstance();
 
             return this._url.Replace("{interval}", config.Interval)
                 .Replace("{symbol}", config.Symbol)
