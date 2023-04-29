@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using App.Enumerator;
+using System.Text.RegularExpressions;
 
 namespace App.Provider
 {
@@ -14,20 +15,23 @@ namespace App.Provider
 
         public static CacheDataProvider getInstance()
         {
-            return new CacheDataProvider();
-        }
-
-        private static CacheDataProvider GetInstance()
-        {
             if (_instance == null)
                 _instance = new CacheDataProvider();
             return _instance;
         }
 
-        public List<Candle>? GetCache(string key)
+        private CacheDataProvider()
         {
             Config config = Config.GetInstance();
-            switch (config.CacheType)
+            if (config.getConfig("cacheType") == ECacheType.File)
+                FileCacheDataProvider.Init();
+        }
+
+        public List<Candle>? GetCache(string key)
+        {
+            key = this.NormalizeKey(key);
+            Config config = Config.GetInstance();
+            switch (config.getConfig("cacheType"))
             {
                 case ECacheType.File:
                     return FileCacheDataProvider.GetCache(key);
@@ -36,6 +40,28 @@ namespace App.Provider
                 default:
                     return null;
             }
+        }
+
+        public void SetCache(string key, List<Candle> candles)
+        {
+            key = this.NormalizeKey(key);
+            Config config = Config.GetInstance();
+            switch ((ECacheType)config.getConfig("cacheType"))
+            {
+                case ECacheType.File:
+                    FileCacheDataProvider.SetCache(key, candles);
+                    break;
+                case ECacheType.NetCache:
+                    NetCacheDataProvider.SetCache(key, candles);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private string NormalizeKey(string key)
+        {
+            return Regex.Replace(key, "[^a-zA-Z0-9_]+", "_");
         }
     }
 }

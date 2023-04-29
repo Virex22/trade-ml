@@ -10,6 +10,7 @@ using App.Entity;
 using Newtonsoft.Json;
 using App.Adapter;
 using System.Runtime.Caching;
+using App.Exception;
 
 namespace App.Provider
 {
@@ -20,24 +21,60 @@ namespace App.Provider
         /**
          * get random day candles values from 00:00 to 23:59
          */
-        public List<Candle> getRandomDayCandleValue(int maxHistoriqueDay = 365)
+        public List<Candle> getRandomDayCandleValue(int maxHistoriqueDay = 365, int dayCount = 10)
         {
-            Random random = new Random();                      
-            DateTimeOffset day = DateTimeOffset.Now.AddDays(Convert.ToDouble(random.Next(1, maxHistoriqueDay) * -1));
-            DateTimeOffset start_timestamp = new DateTimeOffset(day.Year, day.Month, day.Day, 0, 0, 0, TimeSpan.Zero);
-            DateTimeOffset end_timestamp = new DateTimeOffset(day.Year, day.Month, day.Day, 23, 59, 59, TimeSpan.Zero);
+            List<Candle> candles = new List<Candle>();
 
-            string url = buildUrl( start_timestamp, end_timestamp);
-            List<dynamic> test = JsonConvert.DeserializeObject<List<dynamic>>(this.getResult(url)) ?? new List<dynamic>();
-            return CandleAdapter.AdaptBinanceApiListResultToCandleList(test);
+            if (dayCount > maxHistoriqueDay)
+                throw new System.Exception("dayCount must be lower than maxHistoriqueDay");
+
+            DateTimeOffset today = DateTimeOffset.Now;
+            Random random = new Random();
+            DateTimeOffset start = today.AddDays(-random.Next(1 + dayCount, maxHistoriqueDay));
+            DateTimeOffset end = start.AddDays(dayCount);
+
+            for (DateTimeOffset day = start; day <= end; day = day.AddDays(1))
+            {
+                List<Candle> dayCandles = this.getDayCandleValue(day);
+                candles.AddRange(dayCandles);
+            }
+
+            return candles;
         }
 
-        private string buildUrl(DateTimeOffset start_timestamp, DateTimeOffset end_timestamp)
+        public List<Candle> getDayCandleValue(DateTimeOffset day)
+        {
+            DateTimeOffset start_timestamp = new DateTimeOffset(day.Year, day.Month, day.Day, 0, 0, 0, TimeSpan.Zero);
+            DateTimeOffset end_timestamp = new DateTimeOffset(day.Year, day.Month, day.Day, 23, 59, 59, TimeSpan.Zero);
+            string key = string.Format("DayCandles_{0}_{1:yyyy MM dd}", Config.GetInstance().getConfig("interval"), start_timestamp);
+            CacheDataProvider cacheDataProvider = CacheDataProvider.getInstance();
+            List<Candle>? cache = cacheDataProvider.GetCache(key);
+            if (cache != null)
+                return cache;
+
+            List<dynamic> dayData;
+            string url = this.BuildUrl(start_timestamp, end_timestamp);
+            string result = this.getResult(url);
+            try
+            {
+                dayData = JsonConvert.DeserializeObject<List<dynamic>>(result) ?? new List<dynamic>();
+            }
+            catch (System.Exception e)
+            {
+                throw new ApiException(e.Message, result);
+            }
+
+            List<Candle> candles = CandleAdapter.AdaptBinanceApiListResultToCandleList(dayData);
+            cacheDataProvider.SetCache(key, candles);
+            return candles;
+        }
+
+        private string BuildUrl(DateTimeOffset start_timestamp, DateTimeOffset end_timestamp)
         {
             Config config = Config.GetInstance();
 
-            return this._url.Replace("{interval}", config.Interval)
-                .Replace("{symbol}", config.Symbol)
+            return this._url.Replace("{interval}", (string)config.getConfig("interval"))
+                .Replace("{symbol}", (string)config.getConfig("symbol"))
                 .Replace("{start_timestamp}", start_timestamp.ToUnixTimeMilliseconds().ToString())
                 .Replace("{end_timestamp}", end_timestamp.ToUnixTimeMilliseconds().ToString());
         }

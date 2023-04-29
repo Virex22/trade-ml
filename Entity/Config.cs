@@ -7,10 +7,7 @@ namespace App.Entity
 {
     public class Config
     {
-        public string Interval { get; set; }
-        public string Symbol { get; set; }
-        public ECacheType CacheType { get; set; }
-        public string CachePath { get; set; }
+        private dynamic config;
         
 
         private static Config? _instance = null;
@@ -19,23 +16,28 @@ namespace App.Entity
         {
             // load config from file 
             if (!File.Exists(@"Config.json"))
-                throw new Exception("Config file not found");
+                throw new System.Exception("Config file not found");
             string json = File.ReadAllText(@"Config.json");
+
             dynamic? config = JsonConvert.DeserializeObject<dynamic>(json);
+
             if (config == null)
-                throw new Exception("Config file is empty");
-            this.Interval = config.interval;
+                throw new System.Exception("Config file is empty");
+            this.config = config;
+            ConfigTreatment();
+        }
+
+        private void ConfigTreatment()
+        {
             try
             {
                 string stringCacheType = config.cacheType ?? "None";
-                this.CacheType = Enum.Parse<ECacheType>(stringCacheType);
+                config.cacheType = Enum.Parse<ECacheType>(stringCacheType);
             }
-            catch (Exception)
+            catch (System.Exception)
             {
-                throw new Exception("cacheType is not valid");
+                throw new System.Exception("cacheType is not valid");
             }
-            this.CachePath = config.cachePath;
-            this.Symbol = config.symbol;
         }
 
         public static Config GetInstance()
@@ -47,11 +49,15 @@ namespace App.Entity
 
         public void debugConfig()
         {
-            Console.WriteLine("Config:");
-            Console.WriteLine("Interval: " + this.Interval);
-            Console.WriteLine("CacheType: " + this.CacheType);
-            Console.WriteLine("CachePath: " + this.CachePath);
-            Console.WriteLine("Symbol: " + this.Symbol);
+            foreach (var item in config)
+            {
+                Console.WriteLine(item);
+            }
+        }
+
+        public dynamic getConfig (string key)
+        {
+            return config[key];
         }
     }
 }

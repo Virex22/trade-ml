@@ -17,5 +17,13 @@ namespace App.Provider
                 return null;
             return (List<Candle>)cache[key];
         }
+
+        public static void SetCache(string key, List<Candle> candles)
+        {
+            ObjectCache cache = MemoryCache.Default;
+            CacheItemPolicy policy = new CacheItemPolicy();
+            policy.AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(5);
+            cache.Set(key, candles, policy);
+        }
     }
 }
