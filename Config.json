@@ -1,6 +1,7 @@
 ﻿{
-  "symbol": "BTCUDT",
+  "symbol": "BTCUSDT",
   "interval": "5m",
   "cacheType": "File",
-  "cachePath": "data/binance/cache"
+  "cachePath": "data/binance/cache/",
+  "testIntervalDay" : 10
 }

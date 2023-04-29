@@ -1,5 +1,7 @@
 ﻿using App.Core;
+using App.Core.DataSet;
 using App.Entity;
+using App.Enumerator;
 using App.Provider;
 using Newtonsoft.Json;
 using System;
@@ -14,8 +16,11 @@ namespace App
     {
        public void Run()
         {
-            DecisionMaker decisionMaker = new DecisionMaker();
-            TestingDataSet dataSet = new TestingDataSet();  
+            DecisionMaker trader = new DecisionMaker();
+
+            TestingDataSet market = new TestingDataSet();
+            market.Load();
+            market.Subscribe(trader);
         }
     }
 }
