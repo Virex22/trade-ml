@@ -12,6 +12,7 @@ namespace App.Core.DataSet
     {
         private List<IObserver<AbstractDataSet>> observers = new List<IObserver<AbstractDataSet>>();
         public List<Candle> Data { get; set; }
+        public int CurrentIndex { get; protected set; }
 
         public AbstractDataSet()
         {
@@ -32,5 +33,7 @@ namespace App.Core.DataSet
         }
 
         abstract public void Load();
+
+        abstract public void Start();
     }
 }

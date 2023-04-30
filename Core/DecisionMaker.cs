@@ -1,4 +1,5 @@
 ﻿using App.Core.DataSet;
+using App.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,14 @@ namespace App.Core
 {
     public class DecisionMaker : IObserver<AbstractDataSet>
     {
+        public DecisionMaker()
+        {
+
+        }
+
         public void OnCompleted()
         {
-            Console.WriteLine("fin de la periode de test");
+            // No more data to process
         }
 
         public void OnError(System.Exception error)
@@ -22,6 +28,26 @@ namespace App.Core
         public void OnNext(AbstractDataSet value)
         {
             
+        }
+
+        public Decision MakeDecision()
+        {
+            int weightsSum = 0;
+            int indicatorsCount = 0;
+
+            foreach (Indicator indicator in indicators)
+            {
+                weightsSum += indicator.Weight;
+                indicatorsCount++;
+            }
+
+            int averageWeight = 0;
+            if (indicatorsCount > 0)
+            {
+                averageWeight = weightsSum / indicatorsCount;
+            }
+
+            return new Decision(averageWeight);
         }
     }
 }

@@ -13,5 +13,10 @@ namespace App.Core.DataSet
         {
             throw new NotImplementedException();
         }
+
+        public override void Start()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

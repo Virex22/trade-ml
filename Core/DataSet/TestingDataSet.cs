@@ -18,7 +18,16 @@ namespace App.Core.DataSet
         public override void Load()
         {
             TrainingDataProvider trainingDataProvider = new TrainingDataProvider();
-            this.Data = trainingDataProvider.getRandomDayCandleValue(150,10);
+            this.Data = trainingDataProvider.getRandomDayCandleValue(150,30); 
+        }
+
+        public override void Start()
+        {
+            // 20 for let the history to have enough data to make a decision
+            for (this.CurrentIndex = 20; this.CurrentIndex < this.Data.Count; this.CurrentIndex++)
+            {
+                Notify();
+            }
         }
     }
 }
