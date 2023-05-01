@@ -1,4 +1,6 @@
-﻿using App.Entity;
+﻿using App.Core.Parameters;
+using App.Entity;
+using App.Enumerator;
 using App.Interface;
 using System;
 using System.Collections.Generic;
@@ -18,6 +20,6 @@ namespace App.Core.Predictor
             this.indicator = indicator;
         }
 
-        public abstract Decision MakeDecision();
+        public abstract EDecision MakeDecision();
     }
 }

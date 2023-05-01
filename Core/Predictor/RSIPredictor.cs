@@ -1,5 +1,7 @@
 ﻿using App.Core.Indicator;
+using App.Core.Parameters;
 using App.Entity;
+using App.Enumerator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +12,23 @@ namespace App.Core.Predictor
 {
     public class RSIPredictor : AbstractPredictor<RSIIndicator>
     {
-        public RSIPredictor(RSIIndicator indicator) : base(indicator)
+        RSIParameterVariation parameters;
+
+        public RSIPredictor(RSIIndicator indicator, RSIParameterVariation parameters) : base(indicator)
         {
+            this.parameters = parameters;
         }
 
-        public override Decision MakeDecision()
+        public override EDecision MakeDecision()
         {
-            throw new NotImplementedException();
+            decimal RSIValue = this.indicator.Calculate();
+
+            if (this.parameters.RsiSellThreshold < RSIValue)
+                return EDecision.SELL;
+            else if (this.parameters.RsiBuyThreshold > RSIValue)
+                return EDecision.BUY;
+            else
+                return EDecision.HOLD;
         }
     }
 }

@@ -32,7 +32,7 @@ namespace App.Entity
             try
             {
                 string stringCacheType = config.cacheType ?? "None";
-                config.cacheType = Enum.Parse<ECacheType>(stringCacheType);
+                config.cacheType = Enum.Parse<ECache>(stringCacheType);
             }
             catch (System.Exception)
             {

@@ -10,6 +10,7 @@ namespace App.Interface
 
     public interface IIndicator<T> : IIndicator
     {
-        T Calculate();
+        // params to calculate with ParameterVariation
+        T Calculate(params object[] objects);
     }
 }

@@ -9,16 +9,14 @@ namespace App.Core.Indicator
 {
     public class RSIIndicator : IIndicator<decimal>
     {
-        private readonly int period;
         private readonly List<decimal> closePrices;
 
-        public RSIIndicator(int period, List<decimal> closePrices)
+        public RSIIndicator(List<decimal> closePrices)
         {
-            this.period = period;
             this.closePrices = closePrices;
         }
 
-        public decimal Calculate()
+        public decimal Calculate(params object[] objects)
         {
             // Implementation du calcul RSI basé sur les close prices
             decimal sumGain = 0;

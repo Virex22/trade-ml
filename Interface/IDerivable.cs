@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace App.Interface
 {
-    public interface IDecisionNode
+    public interface IDerivable<T>
     {
-        
+        public T Derive();
     }
 }
