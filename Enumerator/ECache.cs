@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace App.Enumerator
 {
-    public enum EDecisionType
+    public enum ECache
     {
         None,
-        Buy,
-        Sell
+        File,
+        NetCache
     }
 }
