@@ -10,12 +10,11 @@ using System.Threading.Tasks;
 
 namespace App.Core.Predictor
 {
-    public abstract class AbstractPredictor<T> 
-        where T : IIndicator
+    public abstract class AbstractPredictor
     {
-        protected readonly T indicator;
+        protected readonly IIndicator indicator;
 
-        public AbstractPredictor(T indicator)
+        public AbstractPredictor(IIndicator indicator)
         {
             this.indicator = indicator;
         }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace App.Core.Predictor
 {
-    public class RSIPredictor : AbstractPredictor<RSIIndicator>
+    public class RSIPredictor : AbstractPredictor
     {
         RSIParameterVariation parameters;
 
@@ -21,7 +21,8 @@ namespace App.Core.Predictor
 
         public override EDecision MakeDecision()
         {
-            decimal RSIValue = this.indicator.Calculate();
+            RSIIndicator rsiIndicator = (RSIIndicator)this.indicator;
+            decimal RSIValue = rsiIndicator.Calculate();
 
             if (this.parameters.RsiSellThreshold < RSIValue)
                 return EDecision.SELL;
