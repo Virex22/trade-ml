@@ -1,14 +1,8 @@
 ﻿using App.Core.Indicator;
 using App.Core.Parameters;
-using App.Entity;
 using App.Enumerator;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace App.Core.Predictor
+namespace App.Core.Predictor.ConcretePredictor
 {
     public class RSIPredictor : AbstractPredictor
     {
@@ -21,12 +15,12 @@ namespace App.Core.Predictor
 
         public override EDecision MakeDecision()
         {
-            RSIIndicator rsiIndicator = (RSIIndicator)this.indicator;
+            RSIIndicator rsiIndicator = (RSIIndicator)indicator;
             decimal RSIValue = rsiIndicator.Calculate();
 
-            if (this.parameters.RsiSellThreshold < RSIValue)
+            if (parameters.SellThreshold < RSIValue)
                 return EDecision.SELL;
-            else if (this.parameters.RsiBuyThreshold > RSIValue)
+            else if (parameters.BuyThreshold > RSIValue)
                 return EDecision.BUY;
             else
                 return EDecision.HOLD;

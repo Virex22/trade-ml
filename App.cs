@@ -1,5 +1,7 @@
 ﻿using App.Core;
 using App.Core.DataSet;
+using App.Core.Parameters;
+using App.Core.Predictor;
 using App.Entity;
 using App.Enumerator;
 using App.Provider;
@@ -16,7 +18,8 @@ namespace App
     {
        public void Run()
         {
-            DecisionMaker trader = new DecisionMaker();
+            StrategyParameters strategy = StrategyParametersBuilder.BuildRandom();
+            DecisionMaker trader = new DecisionMaker(strategy);
 
             TestingDataSet market = new TestingDataSet();
             market.Load();

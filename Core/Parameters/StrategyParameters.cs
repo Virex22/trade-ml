@@ -3,17 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using App.Core.Parameters;
+using App.Interface;
 
-namespace App.Core
+namespace App.Core.Parameters
 {
-    public class StrategyParameters
+    public class StrategyParameters : IDerivable<StrategyParameters>
     {
         private Dictionary<string, AbstractParameterVariation> parameterVariations = new Dictionary<string, AbstractParameterVariation>();
 
         public void AddParameterVariation(string predictorName, AbstractParameterVariation variation)
         {
             parameterVariations[predictorName] = variation;
+        }
+
+        public StrategyParameters Derive()
+        {
+            StrategyParameters strategyParameters = new StrategyParameters();
+            foreach (KeyValuePair<string, AbstractParameterVariation> parameterVariation in parameterVariations)
+                strategyParameters.AddParameterVariation(parameterVariation.Key, parameterVariation.Value.Derive());
+            return strategyParameters;
         }
 
         public AbstractParameterVariation GetParameterVariation(string predictorName)

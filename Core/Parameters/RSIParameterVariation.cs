@@ -8,26 +8,24 @@ namespace App.Core.Parameters
 {
     public class RSIParameterVariation : AbstractParameterVariation
     {
-        public RSIParameterVariation()
+        private readonly Random random = new Random();
+
+        public decimal BuyThreshold
         {
+            get { return (decimal)this.parameters["BuyThreshold"]; }
+            set { this.parameters["BuyThreshold"] = value; }
         }
 
-        public decimal RsiBuyThreshold
+        public decimal SellThreshold
         {
-            get { return (decimal)this.parameters["RsiBuyThreshold"]; }
-            set { this.parameters["RsiBuyThreshold"] = value; }
+            get { return (decimal)this.parameters["SellThreshold"]; }
+            set { this.parameters["SellThreshold"] = value; }
         }
 
-        public decimal RsiSellThreshold
+        public int Period
         {
-            get { return (decimal)this.parameters["RsiSellThreshold"]; }
-            set { this.parameters["RsiSellThreshold"] = value; }
-        }
-
-        public int RSIPeriod
-        {
-            get { return (int)this.parameters["RSIPeriod"]; }
-            set { this.parameters["RSIPeriod"] = value; }
+            get { return (int)this.parameters["Period"]; }
+            set { this.parameters["Period"] = value; }
         }
 
         public override AbstractParameterVariation Derive()
@@ -35,14 +33,9 @@ namespace App.Core.Parameters
             Dictionary<string, object> newParameters = new Dictionary<string, object>();
             foreach (KeyValuePair<string, object> parameter in this.parameters)
             {
-                if (parameter.Key == "RSIPeriod")
-                {
-                    newParameters[parameter.Key] = this.DeriveRSIPeriod((int)parameter.Value);
-                }
-                else
-                {
-                    newParameters[parameter.Key] = this.DeriveThreshold((decimal)parameter.Value);
-                }
+                newParameters[parameter.Key] = parameter.Key == "Period"
+                    ? this.DeriveRSIPeriod((int)parameter.Value)
+                    : this.DeriveThreshold((decimal)parameter.Value);
             }
 
             return new RSIParameterVariation()
@@ -53,12 +46,12 @@ namespace App.Core.Parameters
 
         private object DeriveThreshold(decimal value)
         {
-            return value + (new Random().Next(-2, 3)) * 0.5m;
+            return value + (random.Next(-2, 3)) * 0.5m;
         }
 
         private object DeriveRSIPeriod(int value)
         {
-            return value + (new Random().Next(-1,2));
+            return value + (random.Next(-1,2));
         }
     }
 }

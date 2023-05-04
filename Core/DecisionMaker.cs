@@ -1,4 +1,6 @@
 ﻿using App.Core.DataSet;
+using App.Core.Parameters;
+using App.Core.Predictor;
 using App.Entity;
 using App.Enumerator;
 using System;
@@ -11,9 +13,11 @@ namespace App.Core
 {
     public class DecisionMaker : IObserver<AbstractDataSet>
     {
-        public DecisionMaker()
-        {
+        private DecisionPredictor predictor;
 
+        public DecisionMaker(StrategyParameters strategy)
+        {
+            this.predictor = DecisionPredictorBuilder.Build(strategy);
         }
 
         public void OnCompleted()
