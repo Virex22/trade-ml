@@ -25,6 +25,8 @@ namespace App
             market.Load();
             market.Subscribe(trader);
             market.Start();
+
+            trader.getResults();
         }
     }
 }

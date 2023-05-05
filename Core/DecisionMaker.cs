@@ -39,5 +39,15 @@ namespace App.Core
         {
             return EDecision.HOLD;
         }
+
+        internal TradingSimulationResult GetResults()
+        {
+            int totalTrades = 0;
+            decimal totalReturn = 0;
+            TimeSpan duration = TimeSpan.Zero;
+
+            TradingSimulationResult result = new TradingSimulationResult(totalTrades, totalReturn, duration);
+            return result;
+        }
     }
 }
