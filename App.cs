@@ -22,11 +22,12 @@ namespace App
             DecisionMaker trader = new DecisionMaker(strategy);
 
             TestingDataSet market = new TestingDataSet();
+            trader.SetSubscribedDataSet(market);
+
             market.Load();
-            market.Subscribe(trader);
             market.Start();
 
-            trader.getResults();
+            trader.GetResults();
         }
     }
 }

@@ -13,11 +13,15 @@ namespace App.Core
 {
     public class DecisionMaker : IObserver<AbstractDataSet>
     {
+        public AbstractDataSet? subscribedDataSet;
+
         private DecisionPredictor predictor;
+        private TradeManager tradeManager;
 
         public DecisionMaker(StrategyParameters strategy)
         {
-            this.predictor = DecisionPredictorBuilder.Build(strategy);
+            this.predictor = DecisionPredictorBuilder.Build(strategy,this);
+            this.tradeManager = new TradeManager();
         }
 
         public void OnCompleted()
@@ -30,10 +34,31 @@ namespace App.Core
             // Error is not handled
         }
 
-        public void OnNext(AbstractDataSet value)
+        public void OnNext(AbstractDataSet dataSet)
         {
-            
+            if (subscribedDataSet == null)
+                subscribedDataSet = dataSet;
+
+            List<EDecision> decisions = predictor.MakeDecision();
+
+            double BuyRate = this.CalculateRate(decisions, EDecision.BUY);
+            double SellRate = this.CalculateRate(decisions, EDecision.SELL);
         }
+
+        private double CalculateRate(List<EDecision> decisions, EDecision type)
+        {
+            double count = decisions.Where(x => x == type).Count();
+            double total = decisions.Count();
+            return count / total;
+        }
+
+        public void SetSubscribedDataSet(AbstractDataSet dataSet)
+        {
+            subscribedDataSet = dataSet;
+            dataSet.Subscribe(this);
+        }
+
+        // when is subscribe to dataset, it will call this method
 
         public EDecision MakeDecision()
         {

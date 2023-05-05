@@ -12,12 +12,12 @@ namespace App.Adapter
         public static Candle AdaptBinanceApiResultToCandle(dynamic apiResult)
         {
             Candle candle = new Candle();
-            candle.open_time = DateTimeOffset.FromUnixTimeMilliseconds((long)apiResult[0]);
-            candle.open = apiResult[1];
-            candle.high = apiResult[2];
-            candle.low = apiResult[3];
-            candle.close = apiResult[4];
-            candle.close_time = DateTimeOffset.FromUnixTimeMilliseconds((long)apiResult[6]);
+            candle.OpenTime = DateTimeOffset.FromUnixTimeMilliseconds((long)apiResult[0]);
+            candle.Open = apiResult[1];
+            candle.High = apiResult[2];
+            candle.Low = apiResult[3];
+            candle.Close = apiResult[4];
+            candle.CloseTime = DateTimeOffset.FromUnixTimeMilliseconds((long)apiResult[6]);
             return candle;
         }
         public static List<Candle> AdaptBinanceApiListResultToCandleList(List<dynamic> apiResults)

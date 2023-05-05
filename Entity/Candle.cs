@@ -8,12 +8,12 @@ namespace App.Entity
 {
     public class Candle
     {
-        public DateTimeOffset open_time;
-        public double open;
-        public double high;
-        public double low;
-        public double close;
-        public DateTimeOffset close_time;
+        public DateTimeOffset OpenTime;
+        public decimal Open;
+        public decimal High;
+        public decimal Low;
+        public decimal Close;
+        public DateTimeOffset CloseTime;
 
         public Candle()
         {
