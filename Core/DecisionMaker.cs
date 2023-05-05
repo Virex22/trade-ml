@@ -43,8 +43,8 @@ namespace App.Core
 
             List<EDecision> decisions = predictor.MakeDecision();
 
-            double BuyRatePercentage = this.CalculateRatePercentage(decisions, EDecision.BUY);
-            double SellRatePercentage = this.CalculateRatePercentage(decisions, EDecision.SELL);
+            decimal BuyRatePercentage = this.CalculateRatePercentage(decisions, EDecision.BUY);
+            decimal SellRatePercentage = this.CalculateRatePercentage(decisions, EDecision.SELL);
 
             this.MakeDecision(BuyRatePercentage, SellRatePercentage);
         }
@@ -65,20 +65,32 @@ namespace App.Core
             return result;
         }
 
-        private void MakeDecision(double BuyRatePercentage, double SellRatePercentage)
+        private void MakeDecision(decimal BuyRatePercentage, decimal SellRatePercentage)
         {
+            if (this.subscribedDataSet == null)
+            {
+                throw new ArgumentException("Subscribed data set cannot be null.");
+            }
 
+            if (BuyRatePercentage >= globalParameterVariation.BuyRatioToTrade)
+            {
+                tradeManager.OpenTrade(Trade.TradeType.Buy, this.subscribedDataSet.CurrentPrice, this.subscribedDataSet.CurrentPrice - 100, this.subscribedDataSet.CurrentPrice + 150);
+            }
+            else if (SellRatePercentage >= globalParameterVariation.SellRatioToTrade)
+            {
+                tradeManager.OpenTrade(Trade.TradeType.Sell, this.subscribedDataSet.CurrentPrice, this.subscribedDataSet.CurrentPrice + 100, this.subscribedDataSet.CurrentPrice - 150);
+            }
         }
 
-        private double CalculateRatePercentage(List<EDecision> decisions, EDecision type)
+        private decimal CalculateRatePercentage(List<EDecision> decisions, EDecision type)
         {
             if (decisions.Count == 0)
             {
                 throw new ArgumentException("List of decisions cannot be empty.");
             }
-            double count = decisions.Where(x => x == type).Count();
-            double total = decisions.Count();
-            return (count / total) * 100.0;
+            decimal count = decisions.Where(x => x == type).Count();
+            decimal total = decisions.Count();
+            return (count / total) * 100.0m;
         }
     }
 }
