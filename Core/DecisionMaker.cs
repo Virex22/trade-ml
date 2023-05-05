@@ -17,11 +17,13 @@ namespace App.Core
 
         private DecisionPredictor predictor;
         private TradeManager tradeManager;
+        private GlobalParameterVariation globalParameterVariation;
 
         public DecisionMaker(StrategyParameters strategy)
         {
             this.predictor = DecisionPredictorBuilder.Build(strategy,this);
             this.tradeManager = new TradeManager();
+            this.globalParameterVariation = (GlobalParameterVariation) strategy.GetParameterVariation("Global");
         }
 
         public void OnCompleted()

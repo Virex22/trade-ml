@@ -8,15 +8,15 @@ namespace App.Core.Parameters
 {
     public class GlobalParameterVariation : AbstractParameterVariation
     {
-        public decimal BuyRatioPercentageToLaunchATrade;
-        public decimal SellRatioPercentageToLaunchATrade;
+        public decimal BuyRatioToTrade;
+        public decimal SellRatioToTrade;
 
         public override AbstractParameterVariation Derive()
         {
             return new GlobalParameterVariation()
             {
-                BuyRatioPercentageToLaunchATrade = this.DeriveRatio(this.BuyRatioPercentageToLaunchATrade),
-                SellRatioPercentageToLaunchATrade = this.DeriveRatio(this.SellRatioPercentageToLaunchATrade)
+                BuyRatioToTrade = this.DeriveRatio(this.BuyRatioToTrade),
+                SellRatioToTrade = this.DeriveRatio(this.SellRatioToTrade)
             };
         }
 
