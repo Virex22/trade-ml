@@ -41,15 +41,10 @@ namespace App.Core
 
             List<EDecision> decisions = predictor.MakeDecision();
 
-            double BuyRate = this.CalculateRate(decisions, EDecision.BUY);
-            double SellRate = this.CalculateRate(decisions, EDecision.SELL);
-        }
+            double BuyRatePercentage = this.CalculateRatePercentage(decisions, EDecision.BUY);
+            double SellRatePercentage = this.CalculateRatePercentage(decisions, EDecision.SELL);
 
-        private double CalculateRate(List<EDecision> decisions, EDecision type)
-        {
-            double count = decisions.Where(x => x == type).Count();
-            double total = decisions.Count();
-            return count / total;
+            this.MakeDecision(BuyRatePercentage, SellRatePercentage);
         }
 
         public void SetSubscribedDataSet(AbstractDataSet dataSet)
@@ -58,14 +53,7 @@ namespace App.Core
             dataSet.Subscribe(this);
         }
 
-        // when is subscribe to dataset, it will call this method
-
-        public EDecision MakeDecision()
-        {
-            return EDecision.HOLD;
-        }
-
-        internal TradingSimulationResult GetResults()
+        public TradingSimulationResult GetResults()
         {
             int totalTrades = 0;
             decimal totalReturn = 0;
@@ -73,6 +61,22 @@ namespace App.Core
 
             TradingSimulationResult result = new TradingSimulationResult(totalTrades, totalReturn, duration);
             return result;
+        }
+
+        private void MakeDecision(double BuyRatePercentage, double SellRatePercentage)
+        {
+
+        }
+
+        private double CalculateRatePercentage(List<EDecision> decisions, EDecision type)
+        {
+            if (decisions.Count == 0)
+            {
+                throw new ArgumentException("List of decisions cannot be empty.");
+            }
+            double count = decisions.Where(x => x == type).Count();
+            double total = decisions.Count();
+            return (count / total) * 100.0;
         }
     }
 }

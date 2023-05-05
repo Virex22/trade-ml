@@ -22,8 +22,6 @@ namespace App.Core.Predictor.ConcretePredictor
         {
             RSIIndicator rsiIndicator = (RSIIndicator)indicator;
 
-            
-
             decimal RSIValue = rsiIndicator.Calculate(GetCandles());
 
             if (parameters.SellThreshold < RSIValue)

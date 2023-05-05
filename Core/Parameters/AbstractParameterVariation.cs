@@ -9,13 +9,7 @@ namespace App.Core.Parameters
 {
     public abstract class AbstractParameterVariation : IDerivable<AbstractParameterVariation>
     {
-        protected Dictionary<string, object> parameters;
-
-        public AbstractParameterVariation()
-        {
-            this.parameters = parameters = new Dictionary<string, object>();
-        }
-
+        protected readonly Random random = new Random();
         public abstract AbstractParameterVariation Derive();
     }
 }
