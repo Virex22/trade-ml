@@ -24,6 +24,7 @@ namespace App
             TestingDataSet market = new TestingDataSet();
             market.Load();
             market.Subscribe(trader);
+            market.Start();
         }
     }
 }

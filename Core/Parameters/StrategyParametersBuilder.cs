@@ -10,9 +10,10 @@ namespace App.Core.Parameters
     {
         public static StrategyParameters BuildRandom()
         {
+            Random random = new Random();
             StrategyParameters parameters = new StrategyParameters();
 
-            parameters.AddParameterVariation("RSI", new RSIParameterVariation() {Period = 14, SellThreshold = 70, BuyThreshold = 30 });
+            parameters.AddParameterVariation("RSI", new RSIParameterVariation() {Period = random.Next(13,16), SellThreshold = random.Next(65, 75), BuyThreshold = random.Next(25, 35) });
 
             return parameters;
         }

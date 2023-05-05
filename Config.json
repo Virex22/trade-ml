@@ -3,5 +3,6 @@
   "interval": "5m",
   "cacheType": "File",
   "cachePath": "data/binance/cache/",
-  "testIntervalDay" : 10
+  "testIntervalDay": 10,
+  "HistMinDataBufferLen":  100
 }
