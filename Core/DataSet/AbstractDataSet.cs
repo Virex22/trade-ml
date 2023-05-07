@@ -34,6 +34,12 @@ namespace App.Core.DataSet
                 observer.OnNext(this);
         }
 
+        protected void NotifyComplete()
+        {
+            foreach (var observer in observers)
+                observer.OnCompleted();
+        }
+
         abstract public void Load();
 
         abstract public void Start();

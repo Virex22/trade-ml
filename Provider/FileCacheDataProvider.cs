@@ -23,11 +23,16 @@ namespace App.Provider
         public static List<Candle>? GetCache(string key)
         {
             Config config = Config.GetInstance();
-            string path = config.getConfig("cachePath") + key;
+            string path = config.getConfig("cachePath") + key + extension;
             if (!File.Exists(path))
                 return null;
             string json = File.ReadAllText(path);
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<Candle>>(json) ?? null;
+            List<Candle>? result = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Candle>>(json) ?? null;
+            if (result != null)
+                Console.WriteLine("Successfully loaded cache for " + key);
+            else
+                Console.WriteLine("Failed to load cache for " + key);
+            return result;
         }
 
         public static void SetCache(string key, List<Candle> candles)

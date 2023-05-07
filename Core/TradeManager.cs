@@ -33,6 +33,11 @@ namespace App.Core
             Trade trade = new Trade(type, entryPrice, stopLossPrice, takeProfitPrice, AmountToTrade);
 
             activeTrades.Add(trade);
+
+            if (type == Trade.TradeType.Buy)
+                wallet.Withdraw(AmountToTrade);
+            else
+                wallet.Deposit(AmountToTrade);
         }
 
 
@@ -42,13 +47,15 @@ namespace App.Core
             {
                 if (trade.HasReachedStopLoss(marketData.CurrentPrice))
                 {
-                    trade.Close(trade.StopLossPrice);
+                    decimal tradeAmount = trade.Close(trade.StopLossPrice);
+                    wallet.Deposit(tradeAmount);
                     activeTrades.Remove(trade);
                     closedTrades.Add(trade);
                 }
                 else if (trade.HasReachedTakeProfit(marketData.CurrentPrice))
                 {
-                    trade.Close(trade.TakeProfitPrice);
+                    decimal tradeAmount = trade.Close(trade.TakeProfitPrice);
+                    wallet.Deposit(tradeAmount);
                     activeTrades.Remove(trade);
                     closedTrades.Add(trade);
                 }
@@ -57,12 +64,22 @@ namespace App.Core
 
         public void OnCompleted()
         {
-            // Ignored
+            // close all active trades but let in active list for reporting
+            foreach (Trade trade in activeTrades.ToList())
+            {
+                decimal tradeAmount = trade.Close(trade.EntryPrice);
+                wallet.Deposit(tradeAmount);
+            }
         }
 
         public void OnError(System.Exception error)
         {
-            // Ignored
+            Debug.WriteLine(error.Message);
+        }
+
+        public int GetTotalTrades(bool onlyClosedTrade = true)
+        {
+            return onlyClosedTrade ? closedTrades.Count : activeTrades.Count + closedTrades.Count;
         }
     }
 }

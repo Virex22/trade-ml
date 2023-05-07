@@ -33,10 +33,20 @@ namespace App.Entity
             this.Amount = Amount;
         }
 
-        public void Close(decimal closePrice)
+        // close trade and calculate profit/loss
+        public decimal Close(decimal closePrice)
         {
             CloseTime = DateTime.Now;
             ClosePrice = closePrice;
+
+            decimal profitLoss = 0;
+
+            if (Type == TradeType.Buy)
+                profitLoss = (closePrice - EntryPrice) * Amount;
+            else
+                profitLoss = (EntryPrice - closePrice) * Amount;
+
+            return profitLoss;
         }
 
         public bool HasReachedStopLoss(decimal currentPrice)

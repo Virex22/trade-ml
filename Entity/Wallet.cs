@@ -24,9 +24,7 @@ namespace App.Entity
         public void Withdraw(decimal amount)
         {
             if (amount > this.Balance)
-            {
                 throw new InsufficientFundsException("Not enough funds in the wallet.");
-            }
 
             this.Balance -= amount;
         }

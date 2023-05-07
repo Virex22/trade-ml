@@ -31,6 +31,8 @@ namespace App.Core.DataSet
             // 20 for let the history to have enough data to make a decision
             for (this.CurrentIndex = initialIndex; this.CurrentIndex < this.Data.Count; this.CurrentIndex++)
                 Notify();
+
+            NotifyComplete();
         }
     }
 }

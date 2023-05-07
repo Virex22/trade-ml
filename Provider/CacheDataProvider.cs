@@ -31,7 +31,7 @@ namespace App.Provider
         {
             key = this.NormalizeKey(key);
             Config config = Config.GetInstance();
-            switch (config.getConfig("cacheType"))
+            switch ((ECache) config.getConfig("cacheType"))
             {
                 case ECache.File:
                     return FileCacheDataProvider.GetCache(key);

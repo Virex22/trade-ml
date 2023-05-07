@@ -19,6 +19,10 @@ namespace App.Core
         private TradeManager tradeManager;
         private GlobalParameterVariation globalParameterVariation;
         private Wallet wallet;
+        private DateTime startingTime;
+        private DateTime endTime;
+        private decimal initialBalance;
+
 
         public DecisionMaker(StrategyParameters strategy, decimal initialBalance = 1000)
         {
@@ -26,16 +30,17 @@ namespace App.Core
             this.wallet = new Wallet(initialBalance);
             this.globalParameterVariation = (GlobalParameterVariation)strategy.GetParameterVariation("Global");
             this.tradeManager = new TradeManager(this.wallet, globalParameterVariation);
+            this.initialBalance = initialBalance;
         }
 
         public void OnCompleted()
         {
-            // No more data to process
+            endTime = DateTime.Now;
         }
 
         public void OnError(System.Exception error)
         {
-            // Error is not handled
+            Console.WriteLine("Error: " + error.Message);
         }
 
         public void OnNext(AbstractDataSet dataSet)
@@ -54,16 +59,20 @@ namespace App.Core
         public void SetSubscribedDataSet(AbstractDataSet dataSet)
         {
             subscribedDataSet = dataSet;
+            this.startingTime = DateTime.Now;
             dataSet.Subscribe(this);
         }
 
         public TradingSimulationResult GetResults()
         {
-            int totalTrades = 0;
-            decimal totalReturn = 0;
-            TimeSpan duration = TimeSpan.Zero;
+            int totalTrades = tradeManager.GetTotalTrades();
 
-            TradingSimulationResult result = new TradingSimulationResult(totalTrades, totalReturn, duration);
+            TradingSimulationResult result = new TradingSimulationResult()
+            {
+                TotalTrades = totalTrades,
+                Duration = endTime - startingTime,
+                TotalProfit = wallet.Balance - initialBalance
+            };
             return result;
         }
 
