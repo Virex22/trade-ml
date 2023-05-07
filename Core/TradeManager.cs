@@ -1,4 +1,5 @@
 ﻿using App.Core.DataSet;
+using App.Core.Parameters;
 using App.Entity;
 using System;
 using System.Collections.Generic;
@@ -13,13 +14,23 @@ namespace App.Core
     {
         private List<Trade> activeTrades = new List<Trade>();
         private List<Trade> closedTrades = new List<Trade>();
+        private Wallet wallet;
+        GlobalParameterVariation globalParameter;
 
         public IReadOnlyList<Trade> ActiveTrades => activeTrades.AsReadOnly();
         public IReadOnlyList<Trade> ClosedTrades => closedTrades.AsReadOnly();
 
+        public TradeManager(Wallet wallet, GlobalParameterVariation globalParameter)
+        {
+            this.wallet = wallet;
+            this.globalParameter = globalParameter;
+        }
+
         public void OpenTrade(Trade.TradeType type, decimal entryPrice, decimal stopLossPrice, decimal takeProfitPrice)
         {
-            Trade trade = new Trade(type, entryPrice, stopLossPrice, takeProfitPrice);
+            decimal AmountToTrade = globalParameter.TradeAmountPercentage * wallet.Balance / 100;
+            
+            Trade trade = new Trade(type, entryPrice, stopLossPrice, takeProfitPrice, AmountToTrade);
 
             activeTrades.Add(trade);
         }

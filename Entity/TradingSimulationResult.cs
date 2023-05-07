@@ -18,5 +18,12 @@ namespace App.Entity
             TotalReturn = totalReturn;
             Duration = duration;
         }
+
+        internal void Debug()
+        {
+            Console.WriteLine("TotalTrades: " + TotalTrades);
+            Console.WriteLine("TotalReturn: " + TotalReturn);
+            Console.WriteLine("Duration: " + Duration);
+        }
     }
 }

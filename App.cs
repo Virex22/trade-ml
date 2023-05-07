@@ -16,7 +16,9 @@ namespace App
 {
     public class App
     {
-       public void Run()
+
+
+        public void Run()
         {
             StrategyParameters strategy = StrategyParametersBuilder.BuildRandom();
             DecisionMaker trader = new DecisionMaker(strategy);
@@ -27,7 +29,8 @@ namespace App
             market.Load();
             market.Start();
 
-            trader.GetResults();
+            TradingSimulationResult result = trader.GetResults();
+            result.Debug();
         }
     }
 }

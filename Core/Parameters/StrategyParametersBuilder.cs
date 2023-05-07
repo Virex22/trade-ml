@@ -13,8 +13,17 @@ namespace App.Core.Parameters
             Random random = new Random();
             StrategyParameters parameters = new StrategyParameters();
 
-            parameters.AddParameterVariation("Global", new GlobalParameterVariation() { BuyRatioToTrade = random.Next(28, 32), SellRatioToTrade = random.Next(28, 32) });
-            parameters.AddParameterVariation("RSI", new RSIParameterVariation() {Period = random.Next(13,16), SellThreshold = random.Next(65, 75), BuyThreshold = random.Next(25, 35) });     
+            parameters.AddParameterVariation("Global", new GlobalParameterVariation()
+            {
+                BuyRatioToTrade = random.Next(28, 32),
+                SellRatioToTrade = random.Next(28, 32),
+                TradeAmountPercentage = random.Next(1, 2)
+            });
+
+            parameters.AddParameterVariation("RSI", new RSIParameterVariation() {
+                Period = random.Next(13,16), 
+                SellThreshold = random.Next(65, 75), 
+                BuyThreshold = random.Next(25, 35) });     
 
             return parameters;
         }

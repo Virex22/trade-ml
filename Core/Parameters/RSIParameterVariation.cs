@@ -18,9 +18,9 @@ namespace App.Core.Parameters
         {
             return new RSIParameterVariation()
             {
-                BuyThreshold = (decimal)this.DeriveThreshold(this.BuyThreshold),
-                SellThreshold = (decimal)this.DeriveThreshold(this.SellThreshold),
-                Period = (int)this.DeriveRSIPeriod(this.Period)
+                BuyThreshold = this.DeriveDecimal(this.BuyThreshold, 0.5m, 2),
+                SellThreshold = this.DeriveDecimal(this.SellThreshold, 0.5m, 2),
+                Period = (int) this.DeriveDecimal(this.Period, 1, 1)
             };
         }
 

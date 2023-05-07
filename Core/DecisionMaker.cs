@@ -18,12 +18,14 @@ namespace App.Core
         private DecisionPredictor predictor;
         private TradeManager tradeManager;
         private GlobalParameterVariation globalParameterVariation;
+        private Wallet wallet;
 
-        public DecisionMaker(StrategyParameters strategy)
+        public DecisionMaker(StrategyParameters strategy, decimal initialBalance = 1000)
         {
             this.predictor = DecisionPredictorBuilder.Build(strategy,this);
-            this.tradeManager = new TradeManager();
-            this.globalParameterVariation = (GlobalParameterVariation) strategy.GetParameterVariation("Global");
+            this.wallet = new Wallet(initialBalance);
+            this.globalParameterVariation = (GlobalParameterVariation)strategy.GetParameterVariation("Global");
+            this.tradeManager = new TradeManager(this.wallet, globalParameterVariation);
         }
 
         public void OnCompleted()

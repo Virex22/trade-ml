@@ -21,14 +21,16 @@ namespace App.Entity
         public decimal TakeProfitPrice { get; private set; }
         public DateTime CloseTime { get; private set; }
         public decimal? ClosePrice { get; private set; }
+        public decimal Amount { get; private set; }
 
-        public Trade(TradeType type, decimal entryPrice, decimal stopLossPrice, decimal takeProfitPrice)
+        public Trade(TradeType type, decimal entryPrice, decimal stopLossPrice, decimal takeProfitPrice , decimal Amount)
         {
             Type = type;
             EntryPrice = entryPrice;
             StopLossPrice = stopLossPrice;
             TakeProfitPrice = takeProfitPrice;
             EntryTime = DateTime.Now;
+            this.Amount = Amount;
         }
 
         public void Close(decimal closePrice)

@@ -9,26 +9,19 @@ namespace App.Core.Parameters
     public class GlobalParameterVariation : AbstractParameterVariation
     {
         public decimal BuyRatioToTrade;
+        
         public decimal SellRatioToTrade;
+
+        public decimal TradeAmountPercentage;
 
         public override AbstractParameterVariation Derive()
         {
             return new GlobalParameterVariation()
             {
-                BuyRatioToTrade = this.DeriveRatio(this.BuyRatioToTrade),
-                SellRatioToTrade = this.DeriveRatio(this.SellRatioToTrade)
+                BuyRatioToTrade = this.DeriveDecimal(this.BuyRatioToTrade, 0.5m, 2),
+                SellRatioToTrade = this.DeriveDecimal(this.SellRatioToTrade, 0.5m, 2),
+                TradeAmountPercentage = this.DeriveDecimal(this.TradeAmountPercentage, 0.05m, 10, 0.1m, 5.0m)
             };
-        }
-
-        private decimal DeriveRatio(decimal ratio)
-        {
-            decimal variation = this.random.Next(-5, 6) / 10;
-
-            decimal derivedRatio = ratio + variation;
-
-            derivedRatio = Math.Max(Math.Min(derivedRatio, 100), 0);
-
-            return derivedRatio;
         }
     }
 }
