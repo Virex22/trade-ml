@@ -61,11 +61,13 @@ namespace App.Core
             subscribedDataSet = dataSet;
             this.startingTime = DateTime.Now;
             dataSet.Subscribe(this);
+            dataSet.Subscribe(tradeManager);
         }
 
         public TradingSimulationResult GetResults()
         {
             int totalTrades = tradeManager.GetTotalTrades();
+            Console.WriteLine("All trades count: " + tradeManager.GetTotalTrades(false));
 
             TradingSimulationResult result = new TradingSimulationResult()
             {
@@ -73,6 +75,7 @@ namespace App.Core
                 Duration = endTime - startingTime,
                 TotalProfit = wallet.Balance - initialBalance
             };
+
             return result;
         }
 

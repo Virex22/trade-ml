@@ -22,6 +22,7 @@ namespace App.Entity
         public DateTime CloseTime { get; private set; }
         public decimal? ClosePrice { get; private set; }
         public decimal Amount { get; private set; }
+        public decimal? ProfitLoss { get; private set; }
 
         public Trade(TradeType type, decimal entryPrice, decimal stopLossPrice, decimal takeProfitPrice , decimal Amount)
         {
@@ -33,7 +34,7 @@ namespace App.Entity
             this.Amount = Amount;
         }
 
-        // close trade and calculate profit/loss
+        // return end trade amount
         public decimal Close(decimal closePrice)
         {
             CloseTime = DateTime.Now;
@@ -42,11 +43,18 @@ namespace App.Entity
             decimal profitLoss = 0;
 
             if (Type == TradeType.Buy)
-                profitLoss = (closePrice - EntryPrice) * Amount;
+                profitLoss = (closePrice - EntryPrice) * (Amount / EntryPrice);
             else
-                profitLoss = (EntryPrice - closePrice) * Amount;
+                profitLoss = (EntryPrice - closePrice) * (Amount / EntryPrice);
 
-            return profitLoss;
+            ProfitLoss = profitLoss;
+
+            return Amount + profitLoss;
+        }
+
+        public bool HasReachedStopLossOrTakeProfit(decimal currentPrice)
+        {
+            return HasReachedStopLoss(currentPrice) || HasReachedTakeProfit(currentPrice);
         }
 
         public bool HasReachedStopLoss(decimal currentPrice)

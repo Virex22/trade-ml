@@ -28,16 +28,28 @@ namespace App.Core
 
         public void OpenTrade(Trade.TradeType type, decimal entryPrice, decimal stopLossPrice, decimal takeProfitPrice)
         {
+            if (!this.IsEligible(type))
+                return;
+
             decimal AmountToTrade = globalParameter.TradeAmountPercentage * wallet.Balance / 100;
             
             Trade trade = new Trade(type, entryPrice, stopLossPrice, takeProfitPrice, AmountToTrade);
 
             activeTrades.Add(trade);
 
+            Console.WriteLine("withdraw amount to trade from wallet : " + AmountToTrade);
+            Console.WriteLine("wallet balance : " + wallet.Balance.ToString("0.00"));
+
+            wallet.Withdraw(AmountToTrade);
+        }
+
+        // new trade is eligible if there is no active trade of the same type
+        private bool IsEligible(Trade.TradeType type)
+        {
             if (type == Trade.TradeType.Buy)
-                wallet.Withdraw(AmountToTrade);
+                return !activeTrades.Any(t => t.Type == Trade.TradeType.Buy);
             else
-                wallet.Deposit(AmountToTrade);
+                return !activeTrades.Any(t => t.Type == Trade.TradeType.Sell);
         }
 
 
@@ -51,6 +63,7 @@ namespace App.Core
                     wallet.Deposit(tradeAmount);
                     activeTrades.Remove(trade);
                     closedTrades.Add(trade);
+                    Console.WriteLine("Deposit amount to wallet : " + tradeAmount);
                 }
                 else if (trade.HasReachedTakeProfit(marketData.CurrentPrice))
                 {
@@ -58,6 +71,7 @@ namespace App.Core
                     wallet.Deposit(tradeAmount);
                     activeTrades.Remove(trade);
                     closedTrades.Add(trade);
+                    Console.WriteLine("Deposit amount to wallet : " + tradeAmount);
                 }
             }
         }
@@ -69,6 +83,7 @@ namespace App.Core
             {
                 decimal tradeAmount = trade.Close(trade.EntryPrice);
                 wallet.Deposit(tradeAmount);
+                Console.WriteLine("Deposit amount to wallet : " + tradeAmount);
             }
         }
 
