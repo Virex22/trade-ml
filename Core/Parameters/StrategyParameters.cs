@@ -9,6 +9,7 @@ namespace App.Core.Parameters
 {
     public class StrategyParameters : IDerivable<StrategyParameters>
     {
+        [Newtonsoft.Json.JsonProperty("ParameterVariations")]
         private Dictionary<string, AbstractParameterVariation> parameterVariations = new Dictionary<string, AbstractParameterVariation>();
 
         public void AddParameterVariation(string predictorName, AbstractParameterVariation variation)

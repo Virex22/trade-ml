@@ -28,7 +28,7 @@ namespace App
             market.Load();
             market.Start();
 
-            ReportGenerator.GenerateSingleTestReport(trader);
+            ReportGenerator.GenerateSingleTestReport(trader,strategy);
 
             trader.GetResults().Debug();
         }

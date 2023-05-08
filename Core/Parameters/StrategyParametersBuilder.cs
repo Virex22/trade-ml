@@ -15,9 +15,9 @@ namespace App.Core.Parameters
 
             parameters.AddParameterVariation("Global", new GlobalParameterVariation()
             {
-                BuyRatioToTrade = random.Next(28, 32),
-                SellRatioToTrade = random.Next(28, 32),
-                TradeAmountPercentage = random.Next(1, 2)
+                BuyRatioToTrade = random.Next(28, 33),
+                SellRatioToTrade = random.Next(28, 33),
+                TradeAmountPercentage = random.Next(1, 3)
             });
 
             parameters.AddParameterVariation("RSI", new RSIParameterVariation() {
