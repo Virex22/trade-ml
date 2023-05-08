@@ -21,7 +21,7 @@ namespace App.Core
         private Wallet wallet;
         private DateTime startingTime;
         private DateTime endTime;
-        private decimal initialBalance;
+        public decimal initialBalance { get; private set;}
 
 
         public DecisionMaker(StrategyParameters strategy, decimal initialBalance = 1000)
@@ -67,7 +67,6 @@ namespace App.Core
         public TradingSimulationResult GetResults()
         {
             int totalTrades = tradeManager.GetTotalTrades();
-            Console.WriteLine("All trades count: " + tradeManager.GetTotalTrades(false));
 
             TradingSimulationResult result = new TradingSimulationResult()
             {
@@ -105,6 +104,12 @@ namespace App.Core
             decimal count = decisions.Where(x => x == type).Count();
             decimal total = decisions.Count();
             return (count / total) * 100.0m;
+        }
+
+        internal List<Trade> GetTrades()
+        {
+            IReadOnlyList<Trade> tradeList = tradeManager.ClosedTrades;
+            return tradeList.ToList();
         }
     }
 }

@@ -2,6 +2,7 @@
 using App.Core.DataSet;
 using App.Core.Parameters;
 using App.Core.Predictor;
+using App.Core.Reporting;
 using App.Entity;
 using App.Enumerator;
 using App.Provider;
@@ -16,8 +17,6 @@ namespace App
 {
     public class App
     {
-
-
         public void Run()
         {
             StrategyParameters strategy = StrategyParametersBuilder.BuildRandom();
@@ -29,8 +28,9 @@ namespace App
             market.Load();
             market.Start();
 
-            TradingSimulationResult result = trader.GetResults();
-            result.Debug();
+            ReportGenerator.GenerateSingleTestReport(trader);
+
+            trader.GetResults().Debug();
         }
     }
 }

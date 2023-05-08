@@ -37,9 +37,6 @@ namespace App.Core
 
             activeTrades.Add(trade);
 
-            Console.WriteLine("withdraw amount to trade from wallet : " + AmountToTrade);
-            Console.WriteLine("wallet balance : " + wallet.Balance.ToString("0.00"));
-
             wallet.Withdraw(AmountToTrade);
         }
 
@@ -63,7 +60,6 @@ namespace App.Core
                     wallet.Deposit(tradeAmount);
                     activeTrades.Remove(trade);
                     closedTrades.Add(trade);
-                    Console.WriteLine("Deposit amount to wallet : " + tradeAmount);
                 }
                 else if (trade.HasReachedTakeProfit(marketData.CurrentPrice))
                 {
@@ -71,7 +67,6 @@ namespace App.Core
                     wallet.Deposit(tradeAmount);
                     activeTrades.Remove(trade);
                     closedTrades.Add(trade);
-                    Console.WriteLine("Deposit amount to wallet : " + tradeAmount);
                 }
             }
         }
@@ -83,7 +78,6 @@ namespace App.Core
             {
                 decimal tradeAmount = trade.Close(trade.EntryPrice);
                 wallet.Deposit(tradeAmount);
-                Console.WriteLine("Deposit amount to wallet : " + tradeAmount);
             }
         }
 
