@@ -15,6 +15,14 @@ namespace App.Core.DataSet
      */
     public class TestingDataSet : AbstractDataSet
     {
+        public override DateTimeOffset GetCurrentTime()
+        {
+            Console.WriteLine(this.Data.Count);
+            Console.WriteLine(this.CurrentIndex.ToString());
+            Console.WriteLine(this.Data[this.CurrentIndex - 1].CloseTime);
+            return this.Data[this.CurrentIndex - 1].CloseTime;
+        }
+
         public override void Load()
         {
             TrainingDataProvider trainingDataProvider = new TrainingDataProvider();

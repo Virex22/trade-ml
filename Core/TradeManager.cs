@@ -15,6 +15,7 @@ namespace App.Core
         private List<Trade> activeTrades = new List<Trade>();
         private List<Trade> closedTrades = new List<Trade>();
         private Wallet wallet;
+        private AbstractDataSet? marketData;
         GlobalParameterVariation globalParameter;
 
         public IReadOnlyList<Trade> ActiveTrades => activeTrades.AsReadOnly();
@@ -26,14 +27,14 @@ namespace App.Core
             this.globalParameter = globalParameter;
         }
 
-        public void OpenTrade(Trade.TradeType type, decimal entryPrice, decimal stopLossPrice, decimal takeProfitPrice)
+        public void OpenTrade(Trade.TradeType type, Candle candle, decimal stopLossPrice, decimal takeProfitPrice)
         {
             if (!this.IsEligible(type))
                 return;
 
             decimal AmountToTrade = globalParameter.TradeAmountPercentage * wallet.Balance / 100;
             
-            Trade trade = new Trade(type, entryPrice, stopLossPrice, takeProfitPrice, AmountToTrade);
+            Trade trade = new Trade(type, candle, stopLossPrice, takeProfitPrice, AmountToTrade);
 
             activeTrades.Add(trade);
 
@@ -52,18 +53,21 @@ namespace App.Core
 
         public void OnNext(AbstractDataSet marketData)
         {
+            if (this.marketData == null)
+                this.marketData = marketData;
+            DateTimeOffset time = marketData.GetCurrentTime();
             foreach (Trade trade in activeTrades.ToList())
             {
                 if (trade.HasReachedStopLoss(marketData.CurrentPrice))
                 {
-                    decimal tradeAmount = trade.Close(trade.StopLossPrice);
+                    decimal tradeAmount = trade.Close(trade.StopLossPrice, time);
                     wallet.Deposit(tradeAmount);
                     activeTrades.Remove(trade);
                     closedTrades.Add(trade);
                 }
                 else if (trade.HasReachedTakeProfit(marketData.CurrentPrice))
                 {
-                    decimal tradeAmount = trade.Close(trade.TakeProfitPrice);
+                    decimal tradeAmount = trade.Close(trade.TakeProfitPrice, time);
                     wallet.Deposit(tradeAmount);
                     activeTrades.Remove(trade);
                     closedTrades.Add(trade);
@@ -73,10 +77,12 @@ namespace App.Core
 
         public void OnCompleted()
         {
+            DateTimeOffset time = marketData?.GetCurrentTime() ?? DateTimeOffset.Now;
+            
             // close all active trades but let in active list for reporting
             foreach (Trade trade in activeTrades.ToList())
             {
-                decimal tradeAmount = trade.Close(trade.EntryPrice);
+                decimal tradeAmount = trade.Close(trade.EntryPrice, time);
                 wallet.Deposit(tradeAmount);
             }
         }

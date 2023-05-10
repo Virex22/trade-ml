@@ -85,13 +85,14 @@ namespace App.Core
                 throw new ArgumentException("Subscribed data set cannot be null.");
             }
 
+            Candle currentCandle = this.subscribedDataSet.Data[this.subscribedDataSet.CurrentIndex];
             if (BuyRatePercentage >= globalParameterVariation.BuyRatioToTrade)
             {
-                tradeManager.OpenTrade(Trade.TradeType.Buy, this.subscribedDataSet.CurrentPrice, this.subscribedDataSet.CurrentPrice - 100, this.subscribedDataSet.CurrentPrice + 150);
+                tradeManager.OpenTrade(Trade.TradeType.Buy, currentCandle, this.subscribedDataSet.CurrentPrice - 100, this.subscribedDataSet.CurrentPrice + 150);
             }
             else if (SellRatePercentage >= globalParameterVariation.SellRatioToTrade)
             {
-                tradeManager.OpenTrade(Trade.TradeType.Sell, this.subscribedDataSet.CurrentPrice, this.subscribedDataSet.CurrentPrice + 100, this.subscribedDataSet.CurrentPrice - 150);
+                tradeManager.OpenTrade(Trade.TradeType.Sell, currentCandle, this.subscribedDataSet.CurrentPrice + 100, this.subscribedDataSet.CurrentPrice - 150);
             }
         }
 

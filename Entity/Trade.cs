@@ -16,28 +16,28 @@ namespace App.Entity
 
         public TradeType Type { get; private set; }
         public decimal EntryPrice { get; private set; }
-        public DateTime EntryTime { get; private set; }
+        public DateTimeOffset EntryTime { get; private set; }
         public decimal StopLossPrice { get; private set; }
         public decimal TakeProfitPrice { get; private set; }
-        public DateTime CloseTime { get; private set; }
+        public DateTimeOffset CloseTime { get; private set; }
         public decimal? ClosePrice { get; private set; }
         public decimal Amount { get; private set; }
         public decimal? ProfitLoss { get; private set; }
 
-        public Trade(TradeType type, decimal entryPrice, decimal stopLossPrice, decimal takeProfitPrice , decimal Amount)
+        public Trade(TradeType type, Candle candle, decimal stopLossPrice, decimal takeProfitPrice , decimal Amount)
         {
             Type = type;
-            EntryPrice = entryPrice;
+            EntryPrice = candle.Close;
             StopLossPrice = stopLossPrice;
             TakeProfitPrice = takeProfitPrice;
-            EntryTime = DateTime.Now;
+            EntryTime = candle.CloseTime;
             this.Amount = Amount;
         }
 
-        // return end trade amount
-        public decimal Close(decimal closePrice)
+        // return end trade amount  
+        public decimal Close(decimal closePrice, DateTimeOffset time)
         {
-            CloseTime = DateTime.Now;
+            CloseTime = time;
             ClosePrice = closePrice;
 
             decimal profitLoss = 0;
@@ -46,6 +46,22 @@ namespace App.Entity
                 profitLoss = (closePrice - EntryPrice) * (Amount / EntryPrice);
             else
                 profitLoss = (EntryPrice - closePrice) * (Amount / EntryPrice);
+
+            ProfitLoss = profitLoss;
+
+            return Amount + profitLoss;
+        }
+        public decimal Close(Candle candle)
+        {
+            CloseTime = candle.CloseTime;
+            ClosePrice = candle.Close;
+
+            decimal profitLoss = 0;
+
+            if (Type == TradeType.Buy)
+                profitLoss = (candle.Close - EntryPrice) * (Amount / EntryPrice);
+            else
+                profitLoss = (EntryPrice - candle.Close) * (Amount / EntryPrice);
 
             ProfitLoss = profitLoss;
 
