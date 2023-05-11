@@ -1,4 +1,5 @@
-﻿using System;
+﻿using App.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,12 +13,14 @@ namespace App.Core.Parameters
         {
             Random random = new Random();
             StrategyParameters parameters = new StrategyParameters();
+            decimal basedTradeAmountPercentage = (decimal)Config.GetInstance().GetConfig("basedTradeAmountPercentage");
 
             parameters.AddParameterVariation("Global", new GlobalParameterVariation()
             {
                 BuyRatioToTrade = random.Next(28, 33),
                 SellRatioToTrade = random.Next(28, 33),
-                TradeAmountPercentage = random.Next(1, 3)
+                TradeAmountPercentage = random.Next(-1, 2) + basedTradeAmountPercentage,
+                PayOffRatio = (decimal)random.Next(15, 25) / 10
             });
 
             parameters.AddParameterVariation("RSI", new RSIParameterVariation() {

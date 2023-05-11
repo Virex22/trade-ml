@@ -20,7 +20,7 @@ namespace App
         public void Run()
         {
             StrategyParameters strategy = StrategyParametersBuilder.BuildRandom();
-            DecisionMaker trader = new DecisionMaker(strategy);
+            DecisionMaker trader = new DecisionMaker(strategy, (decimal) Config.GetInstance().GetConfig("initialAmount"));
 
             TestingDataSet market = new TestingDataSet();
             trader.SetSubscribedDataSet(market);

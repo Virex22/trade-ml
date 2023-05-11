@@ -1,4 +1,5 @@
-﻿using App.Interface;
+﻿using App.Entity;
+using App.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,8 @@ namespace App.Core.Parameters
 
         public decimal DeriveDecimal(decimal number, decimal step, decimal amplitude, decimal min = 0, decimal max = 100)
         {
+            amplitude = amplitude * Config.GetInstance().GetConfig("variationAmplitudeCoef");
+
             decimal variation = ((decimal)new Random().NextDouble() * 2 * amplitude) - amplitude; // Génère une variation aléatoire dans l'amplitude spécifiée
             decimal derivedValue = number + step * variation;
 

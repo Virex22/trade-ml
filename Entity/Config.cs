@@ -47,7 +47,7 @@ namespace App.Entity
             return _instance;
         }
 
-        public void debugConfig()
+        public void DebugConfig()
         {
             foreach (var item in config)
             {
@@ -55,7 +55,7 @@ namespace App.Entity
             }
         }
 
-        public dynamic getConfig (string key)
+        public dynamic GetConfig (string key)
         {
             return config[key];
         }

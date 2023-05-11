@@ -32,6 +32,7 @@ namespace App.Core
             if (!this.IsEligible(type))
                 return;
 
+
             decimal AmountToTrade = globalParameter.TradeAmountPercentage * wallet.Balance / 100;
             
             Trade trade = new Trade(type, candle, stopLossPrice, takeProfitPrice, AmountToTrade);

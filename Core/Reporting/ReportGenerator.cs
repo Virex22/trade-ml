@@ -26,7 +26,7 @@ namespace App.Core.Reporting
 
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(report, Newtonsoft.Json.Formatting.Indented);
 
-            string path = Config.GetInstance().getConfig("reportPath") + DateTime.Now.ToString("yyyyMMdd") + "\\";
+            string path = Config.GetInstance().GetConfig("reportPath") + DateTime.Now.ToString("yyyyMMdd") + "\\";
             string fileName = "report_" + DateTime.Now.ToString("HHmmss") + ".json";
 
             string fullPath = path + fileName;

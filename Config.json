@@ -5,5 +5,8 @@
   "cachePath": "data/binance/cache/",
   "reportPath":  "data/report/",
   "testIntervalDay": 10,
+  "variationAmplitudeCoef": 3,
+  "initialAmount": 1000,  
+  "basedTradeAmountPercentage" : 10,
   "HistMinDataBufferLen":  100
 }

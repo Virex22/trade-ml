@@ -86,13 +86,15 @@ namespace App.Core
             }
 
             Candle currentCandle = this.subscribedDataSet.Data[this.subscribedDataSet.CurrentIndex];
+
+
             if (BuyRatePercentage >= globalParameterVariation.BuyRatioToTrade)
             {
-                tradeManager.OpenTrade(Trade.TradeType.Buy, currentCandle, this.subscribedDataSet.CurrentPrice - 100, this.subscribedDataSet.CurrentPrice + 150);
+                tradeManager.OpenTrade(Trade.TradeType.Buy, currentCandle, this.subscribedDataSet.CurrentPrice - 100, this.subscribedDataSet.CurrentPrice + 150 * globalParameterVariation.PayOffRatio);
             }
             else if (SellRatePercentage >= globalParameterVariation.SellRatioToTrade)
             {
-                tradeManager.OpenTrade(Trade.TradeType.Sell, currentCandle, this.subscribedDataSet.CurrentPrice + 100, this.subscribedDataSet.CurrentPrice - 150);
+                tradeManager.OpenTrade(Trade.TradeType.Sell, currentCandle, this.subscribedDataSet.CurrentPrice + 100, this.subscribedDataSet.CurrentPrice - 150 * globalParameterVariation.PayOffRatio);
             }
         }
 
