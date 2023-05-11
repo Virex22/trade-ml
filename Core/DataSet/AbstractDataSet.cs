@@ -14,7 +14,7 @@ namespace App.Core.DataSet
         public List<Candle> Data { get; set; }
         public int CurrentIndex { get; protected set; }
 
-        public decimal CurrentPrice => Data[CurrentIndex - 1].Close;
+        public decimal CurrentPrice => Data[CurrentIndex].Close;
 
         public AbstractDataSet()
         {

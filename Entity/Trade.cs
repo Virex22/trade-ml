@@ -32,6 +32,7 @@ namespace App.Entity
             TakeProfitPrice = takeProfitPrice;
             EntryTime = candle.CloseTime;
             this.Amount = Amount;
+            Console.WriteLine("Amount :" + Amount);
         }
 
         // return end trade amount  
@@ -40,12 +41,12 @@ namespace App.Entity
             CloseTime = time;
             ClosePrice = closePrice;
 
-            decimal profitLoss = 0;
-
+            decimal profitLoss;
             if (Type == TradeType.Buy)
                 profitLoss = (closePrice - EntryPrice) * (Amount / EntryPrice);
             else
                 profitLoss = (EntryPrice - closePrice) * (Amount / EntryPrice);
+            Console.WriteLine("profit :" + profitLoss + "\r\n");
 
             ProfitLoss = profitLoss;
 

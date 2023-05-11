@@ -17,10 +17,7 @@ namespace App.Core.DataSet
     {
         public override DateTimeOffset GetCurrentTime()
         {
-            Console.WriteLine(this.Data.Count);
-            Console.WriteLine(this.CurrentIndex.ToString());
-            Console.WriteLine(this.Data[this.CurrentIndex - 1].CloseTime);
-            return this.Data[this.CurrentIndex - 1].CloseTime;
+            return this.Data[this.CurrentIndex].CloseTime;
         }
 
         public override void Load()
@@ -39,6 +36,7 @@ namespace App.Core.DataSet
             // 20 for let the history to have enough data to make a decision
             for (this.CurrentIndex = initialIndex; this.CurrentIndex < this.Data.Count; this.CurrentIndex++)
                 Notify();
+            CurrentIndex--;
 
             NotifyComplete();
         }
