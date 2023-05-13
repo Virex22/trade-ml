@@ -35,7 +35,7 @@ namespace App.Provider
             {
                 case ECache.File:
                     return FileCacheDataProvider.GetCache(key);
-                case ECache.NetCache:
+                case ECache.Net:
                     return NetCacheDataProvider.GetCache(key);
                 default:
                     return null;
@@ -51,7 +51,7 @@ namespace App.Provider
                 case ECache.File:
                     FileCacheDataProvider.SetCache(key, candles);
                     break;
-                case ECache.NetCache:
+                case ECache.Net:
                     NetCacheDataProvider.SetCache(key, candles);
                     break;
                 default:

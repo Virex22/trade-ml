@@ -10,6 +10,6 @@ namespace App.Enumerator
     {
         None,
         File,
-        NetCache
+        Net
     }
 }
