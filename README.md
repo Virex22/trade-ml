@@ -29,8 +29,9 @@ Configuration file is located in `Config.json` file.
   "testIntervalDay": 10,
   "variationAmplitudeCoef": 3,
   "initialAmount": 1000,  
-  "basedTradeAmountPercentage" : 10,
-  "HistMinDataBufferLen":  100
+  "basedTradeAmountPercentage" : 10,   
+  "plateformFeePercentage": 0.1,
+  "histMinDataBufferLen":  100
 }
 ```
 
@@ -44,5 +45,6 @@ Configuration file is located in `Config.json` file.
 - `testIntervalDay` : Number of days to test
 - `variationAmplitudeCoef` : Coefficient of the variation amplitude
 - `initialAmount` : Initial amount to trade
-- `basedTradeAmountPercentage` : Percentage of the total wallet to trade
-- `HistMinDataBufferLen` : Minimum number of candle data before starting the trading analysis
+- `basedTradeAmountPercentage` : Percentage of the total wallet to trade (ex : 10%)
+- `plateformFeePercentage` : Percentage of the plateform fee (ex : 0.1%)
+- `histMinDataBufferLen` : Minimum number of candle data before starting the trading analysis

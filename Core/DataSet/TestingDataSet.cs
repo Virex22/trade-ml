@@ -28,12 +28,11 @@ namespace App.Core.DataSet
 
         public override void Start()
         {
-            int initialIndex = Config.GetInstance().GetConfig("HistMinDataBufferLen");
+            int initialIndex = Config.GetInstance().GetConfig("histMinDataBufferLen");
 
             if (this.Data.Count < initialIndex)
-                throw new InvalidOperationException("Not enough data to start the simulation. Please increase the HistMinDataBufferLen parameter in the config file");
+                throw new InvalidOperationException("Not enough data to start the simulation. Please diminuate the histMinDataBufferLen parameter in the config file.");
 
-            // 20 for let the history to have enough data to make a decision
             for (this.CurrentIndex = initialIndex; this.CurrentIndex < this.Data.Count; this.CurrentIndex++)
                 Notify();
             CurrentIndex--;

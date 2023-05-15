@@ -16,30 +16,32 @@ namespace App.Core
         private List<Trade> closedTrades = new List<Trade>();
         private Wallet wallet;
         private AbstractDataSet? marketData;
-        GlobalParameterVariation globalParameter;
 
         public IReadOnlyList<Trade> ActiveTrades => activeTrades.AsReadOnly();
         public IReadOnlyList<Trade> ClosedTrades => closedTrades.AsReadOnly();
 
-        public TradeManager(Wallet wallet, GlobalParameterVariation globalParameter)
+        public TradeManager(Wallet wallet)
         {
             this.wallet = wallet;
-            this.globalParameter = globalParameter;
         }
 
-        public void OpenTrade(Trade.TradeType type, Candle candle, decimal stopLossPrice, decimal takeProfitPrice)
+        public void OpenTrade(Trade.TradeType type, Candle candle, decimal stopLossPrice, decimal takeProfitPrice, decimal amountToTrade)
         {
             if (!this.IsEligible(type))
                 return;
 
+            // withdraw the fee
+            decimal feePercent = Config.GetInstance().GetConfig("plateformFeePercentage");
+            if (feePercent < 0)
+                feePercent = 0;
 
-            decimal AmountToTrade = globalParameter.TradeAmountPercentage * wallet.Balance / 100;
+            wallet.Withdraw(amountToTrade / 100 * feePercent);
             
-            Trade trade = new Trade(type, candle, stopLossPrice, takeProfitPrice, AmountToTrade);
+            Trade trade = new Trade(type, candle, stopLossPrice, takeProfitPrice, amountToTrade);
 
             activeTrades.Add(trade);
 
-            wallet.Withdraw(AmountToTrade);
+            wallet.Withdraw(amountToTrade);
         }
 
         // new trade is eligible if there is no active trade of the same type

@@ -87,14 +87,27 @@ namespace App.Core
 
             Candle currentCandle = this.subscribedDataSet.Data[this.subscribedDataSet.CurrentIndex];
 
+            decimal AmountToTrade = globalParameterVariation.TradeAmountPercentage * wallet.Balance / 100;
 
             if (BuyRatePercentage >= globalParameterVariation.BuyRatioToTrade)
             {
-                tradeManager.OpenTrade(Trade.TradeType.Buy, currentCandle, this.subscribedDataSet.CurrentPrice - 100, this.subscribedDataSet.CurrentPrice + 150 * globalParameterVariation.PayOffRatio);
+                tradeManager.OpenTrade(
+                    Trade.TradeType.Buy, 
+                    currentCandle, 
+                    this.subscribedDataSet.CurrentPrice - 100, 
+                    this.subscribedDataSet.CurrentPrice + 150 * globalParameterVariation.PayOffRatio,
+                    AmountToTrade
+                );
             }
             else if (SellRatePercentage >= globalParameterVariation.SellRatioToTrade)
             {
-                tradeManager.OpenTrade(Trade.TradeType.Sell, currentCandle, this.subscribedDataSet.CurrentPrice + 100, this.subscribedDataSet.CurrentPrice - 150 * globalParameterVariation.PayOffRatio);
+                tradeManager.OpenTrade(
+                    Trade.TradeType.Sell, 
+                    currentCandle, 
+                    this.subscribedDataSet.CurrentPrice + 100, 
+                    this.subscribedDataSet.CurrentPrice - 150 * globalParameterVariation.PayOffRatio,
+                    AmountToTrade
+                );
             }
         }
 
