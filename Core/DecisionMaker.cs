@@ -29,7 +29,7 @@ namespace App.Core
             this.predictor = DecisionPredictorBuilder.Build(strategy,this);
             this.wallet = new Wallet(initialBalance);
             this.globalParameterVariation = (GlobalParameterVariation)strategy.GetParameterVariation("Global");
-            this.tradeManager = new TradeManager(this.wallet, globalParameterVariation);
+            this.tradeManager = new TradeManager(this.wallet);
             this.initialBalance = initialBalance;
         }
 
