@@ -35,7 +35,6 @@ namespace App.Entity
             Console.WriteLine("Amount :" + Amount);
         }
 
-        // return end trade amount  
         public decimal Close(decimal closePrice, DateTimeOffset time)
         {
             CloseTime = time;

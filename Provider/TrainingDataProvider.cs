@@ -23,38 +23,39 @@ namespace App.Provider
          */
         public List<Candle> getRandomDayCandleValue(int maxHistoriqueDay = 365, int dayCount = 10)
         {
-            List<Candle> candles = new List<Candle>();
-
             if (dayCount > maxHistoriqueDay)
-                throw new System.Exception("dayCount must be lower than maxHistoriqueDay");
+                throw new ArgumentException("dayCount must be lower than maxHistoriqueDay");
 
             DateTimeOffset today = DateTimeOffset.Now;
             Random random = new Random();
             DateTimeOffset start = today.AddDays(-random.Next(1 + dayCount, maxHistoriqueDay));
             DateTimeOffset end = start.AddDays(dayCount);
 
+            List<Candle> candles = new List<Candle>();
             for (DateTimeOffset day = start; day <= end; day = day.AddDays(1))
             {
-                List<Candle> dayCandles = this.getDayCandleValue(day);
-                candles.AddRange(dayCandles);
+                candles.AddRange(GetDayCandleValues(day));
             }
 
             return candles;
         }
 
-        public List<Candle> getDayCandleValue(DateTimeOffset day)
+        public List<Candle> GetDayCandleValues(DateTimeOffset day)
         {
-            DateTimeOffset start_timestamp = new DateTimeOffset(day.Year, day.Month, day.Day, 0, 0, 0, TimeSpan.Zero);
-            DateTimeOffset end_timestamp = new DateTimeOffset(day.Year, day.Month, day.Day, 23, 59, 59, TimeSpan.Zero);
-            string key = string.Format("DayCandles_{0}_{1:yyyy MM dd}", Config.GetInstance().GetConfig("interval"), start_timestamp);
+            DateTimeOffset startTimestamp = new DateTimeOffset(day.Year, day.Month, day.Day, 0, 0, 0, TimeSpan.Zero);
+            DateTimeOffset endTimestamp = new DateTimeOffset(day.Year, day.Month, day.Day, 23, 59, 59, TimeSpan.Zero);
+            string key = $"DayCandles_{Config.GetInstance().Get<string>("interval")}_{startTimestamp:yyyy MM dd}";
             CacheDataProvider cacheDataProvider = CacheDataProvider.getInstance();
             List<Candle>? cache = cacheDataProvider.GetCache(key);
             if (cache != null)
+            {
                 return cache;
+            }
+
+            string url = BuildUrl(startTimestamp, endTimestamp);
+            string result = GetResult(url);
 
             List<dynamic> dayData;
-            string url = this.BuildUrl(start_timestamp, end_timestamp);
-            string result = this.getResult(url);
             try
             {
                 dayData = JsonConvert.DeserializeObject<List<dynamic>>(result) ?? new List<dynamic>();
@@ -69,22 +70,24 @@ namespace App.Provider
             return candles;
         }
 
-        private string BuildUrl(DateTimeOffset start_timestamp, DateTimeOffset end_timestamp)
+        private string BuildUrl(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp)
         {
             Config config = Config.GetInstance();
 
-            return this._url.Replace("{interval}", (string)config.GetConfig("interval"))
-                .Replace("{symbol}", (string)config.GetConfig("symbol"))
-                .Replace("{start_timestamp}", start_timestamp.ToUnixTimeMilliseconds().ToString())
-                .Replace("{end_timestamp}", end_timestamp.ToUnixTimeMilliseconds().ToString());
+            return _url.Replace("{interval}", config.Get<string>("interval"))
+                .Replace("{symbol}", config.Get<string>("symbol"))
+                .Replace("{start_timestamp}", startTimestamp.ToUnixTimeMilliseconds().ToString())
+                .Replace("{end_timestamp}", endTimestamp.ToUnixTimeMilliseconds().ToString());
         }
 
-        private string getResult(string url)
+        private string GetResult(string url)
         {
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            HttpResponseMessage response = client.GetAsync(url).Result;
-            return response.Content.ReadAsStringAsync().Result;
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = client.GetAsync(url).Result;
+                return response.Content.ReadAsStringAsync().Result;
+            }
         }
     }
 }

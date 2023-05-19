@@ -9,8 +9,8 @@ namespace App.Core.Predictor.ConcretePredictor
 {
     public class RSIPredictor : AbstractPredictor
     {
-        RSIParameterVariation parameters;
-        DecisionMaker decisionMaker;
+        private readonly RSIParameterVariation parameters;
+        private readonly DecisionMaker decisionMaker;
 
         public RSIPredictor(DecisionMaker decisionMaker ,RSIIndicator indicator, RSIParameterVariation parameters) : base(indicator)
         {
@@ -21,7 +21,6 @@ namespace App.Core.Predictor.ConcretePredictor
         public override EDecision MakeDecision()
         {
             RSIIndicator rsiIndicator = (RSIIndicator)indicator;
-
             decimal RSIValue = rsiIndicator.Calculate(GetCandles());
 
             if (parameters.SellThreshold < RSIValue)
@@ -42,7 +41,7 @@ namespace App.Core.Predictor.ConcretePredictor
             if (startIndex < 0 || startIndex + parameters.Period > dataSet.Data.Count)
                 throw new ArgumentException($"Cannot extract {parameters.Period} candles from the current index of {dataSet.CurrentIndex} with the available data size of {dataSet.Data.Count} candles.");
 
-            return dataSet.Data.GetRange(startIndex, parameters.Period); 
+            return dataSet.Data.GetRange(startIndex, parameters.Period);
         }
     }
 }

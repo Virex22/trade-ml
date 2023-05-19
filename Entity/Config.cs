@@ -8,23 +8,26 @@ namespace App.Entity
     public class Config
     {
         private dynamic config;
-        
-
         private static Config? _instance = null;
 
         private Config()
         {
-            // load config from file 
-            if (!File.Exists(@"Config.json"))
-                throw new System.Exception("Config file not found");
-            string json = File.ReadAllText(@"Config.json");
+            LoadConfigFromFile();
+            ConfigTreatment();
+        }
 
-            dynamic? config = JsonConvert.DeserializeObject<dynamic>(json);
+        private void LoadConfigFromFile()
+        {
+            string configFilePath = @"Config.json";
+
+            if (!File.Exists(configFilePath))
+                throw new System.Exception("Config file not found");
+
+            string json = File.ReadAllText(configFilePath);
+            config = JsonConvert.DeserializeObject<dynamic>(json);
 
             if (config == null)
                 throw new System.Exception("Config file is empty");
-            this.config = config;
-            ConfigTreatment();
         }
 
         private void ConfigTreatment()
@@ -44,20 +47,19 @@ namespace App.Entity
         {
             if (_instance == null)
                 _instance = new Config();
+
             return _instance;
         }
 
-        public void DebugConfig()
+        public void Debug()
         {
             foreach (var item in config)
-            {
                 Console.WriteLine(item);
-            }
         }
 
-        public dynamic GetConfig (string key)
+        public T Get<T>(string key)
         {
-            return config[key];
+            return (T)config[key];
         }
     }
 }

@@ -13,29 +13,29 @@ namespace App.Core
 {
     public class DecisionMaker : IObserver<AbstractDataSet>
     {
-        public AbstractDataSet? subscribedDataSet;
+        public AbstractDataSet? SubscribedDataSet { get; private set; }
+        public decimal InitialBalance { get; private set; }
 
-        private DecisionPredictor predictor;
-        private TradeManager tradeManager;
-        private GlobalParameterVariation globalParameterVariation;
-        private Wallet wallet;
-        private DateTime startingTime;
-        private DateTime endTime;
-        public decimal initialBalance { get; private set;}
+        private DecisionPredictor Predictor { get; }
+        private TradeManager TradeManager { get; }
+        private GlobalParameterVariation GlobalParameterVariation { get; }
+        private Wallet Wallet { get; }
+        private DateTime StartingTime { get; set; }
+        private DateTime EndTime { get; set; }
 
 
         public DecisionMaker(StrategyParameters strategy, decimal initialBalance = 1000)
         {
-            this.predictor = DecisionPredictorBuilder.Build(strategy,this);
-            this.wallet = new Wallet(initialBalance);
-            this.globalParameterVariation = (GlobalParameterVariation)strategy.GetParameterVariation("Global");
-            this.tradeManager = new TradeManager(this.wallet);
-            this.initialBalance = initialBalance;
+            Predictor = DecisionPredictorBuilder.Build(strategy, this);
+            Wallet = new Wallet(initialBalance);
+            GlobalParameterVariation = (GlobalParameterVariation)strategy.GetParameterVariation("Global");
+            TradeManager = new TradeManager(Wallet);
+            InitialBalance = initialBalance;
         }
 
         public void OnCompleted()
         {
-            endTime = DateTime.Now;
+            EndTime = DateTime.Now;
         }
 
         public void OnError(System.Exception error)
@@ -45,68 +45,67 @@ namespace App.Core
 
         public void OnNext(AbstractDataSet dataSet)
         {
-            if (subscribedDataSet == null)
-                subscribedDataSet = dataSet;
+            if (SubscribedDataSet == null)
+                SubscribedDataSet = dataSet;
 
-            List<EDecision> decisions = predictor.MakeDecision();
+            List<EDecision> decisions = Predictor.MakeDecision();
 
-            decimal BuyRatePercentage = this.CalculateRatePercentage(decisions, EDecision.BUY);
-            decimal SellRatePercentage = this.CalculateRatePercentage(decisions, EDecision.SELL);
+            decimal buyRatePercentage = CalculateRatePercentage(decisions, EDecision.BUY);
+            decimal sellRatePercentage = CalculateRatePercentage(decisions, EDecision.SELL);
 
-            this.MakeDecision(BuyRatePercentage, SellRatePercentage);
+            MakeDecision(buyRatePercentage, sellRatePercentage);
         }
 
         public void SetSubscribedDataSet(AbstractDataSet dataSet)
         {
-            subscribedDataSet = dataSet;
-            this.startingTime = DateTime.Now;
+            SubscribedDataSet = dataSet;
+            StartingTime = DateTime.Now;
             dataSet.Subscribe(this);
-            dataSet.Subscribe(tradeManager);
+            dataSet.Subscribe(TradeManager);
         }
 
         public TradingSimulationResult GetResults()
         {
-            int totalTrades = tradeManager.GetTotalTrades();
+            int totalTrades = TradeManager.GetTotalTrades();
 
             TradingSimulationResult result = new TradingSimulationResult()
             {
                 TotalTrades = totalTrades,
-                Duration = endTime - startingTime,
-                TotalProfit = wallet.Balance - initialBalance
+                Duration = EndTime - StartingTime,
+                TotalProfit = Wallet.Balance - InitialBalance
             };
 
             return result;
         }
 
-        private void MakeDecision(decimal BuyRatePercentage, decimal SellRatePercentage)
+        private void MakeDecision(decimal buyRatePercentage, decimal sellRatePercentage)
         {
-            if (this.subscribedDataSet == null)
-            {
+            if (SubscribedDataSet == null)
                 throw new ArgumentException("Subscribed data set cannot be null.");
-            }
 
-            Candle currentCandle = this.subscribedDataSet.Data[this.subscribedDataSet.CurrentIndex];
 
-            decimal AmountToTrade = globalParameterVariation.TradeAmountPercentage * wallet.Balance / 100;
+            Candle currentCandle = SubscribedDataSet.Data[SubscribedDataSet.CurrentIndex];
 
-            if (BuyRatePercentage >= globalParameterVariation.BuyRatioToTrade)
+            decimal amountToTrade = GlobalParameterVariation.TradeAmountPercentage * Wallet.Balance / 100;
+
+            if (buyRatePercentage >= GlobalParameterVariation.BuyRatioToTrade)
             {
-                tradeManager.OpenTrade(
-                    Trade.TradeType.Buy, 
-                    currentCandle, 
-                    this.subscribedDataSet.CurrentPrice - 100, 
-                    this.subscribedDataSet.CurrentPrice + 150 * globalParameterVariation.PayOffRatio,
-                    AmountToTrade
+                TradeManager.OpenTrade(
+                    Trade.TradeType.Buy,
+                    currentCandle,
+                    SubscribedDataSet.CurrentPrice - 100,
+                    SubscribedDataSet.CurrentPrice + 150 * GlobalParameterVariation.PayOffRatio,
+                    amountToTrade
                 );
             }
-            else if (SellRatePercentage >= globalParameterVariation.SellRatioToTrade)
+            else if (sellRatePercentage >= GlobalParameterVariation.SellRatioToTrade)
             {
-                tradeManager.OpenTrade(
-                    Trade.TradeType.Sell, 
-                    currentCandle, 
-                    this.subscribedDataSet.CurrentPrice + 100, 
-                    this.subscribedDataSet.CurrentPrice - 150 * globalParameterVariation.PayOffRatio,
-                    AmountToTrade
+                TradeManager.OpenTrade(
+                    Trade.TradeType.Sell,
+                    currentCandle,
+                    SubscribedDataSet.CurrentPrice + 100,
+                    SubscribedDataSet.CurrentPrice - 150 * GlobalParameterVariation.PayOffRatio,
+                    amountToTrade
                 );
             }
         }
@@ -114,17 +113,17 @@ namespace App.Core
         private decimal CalculateRatePercentage(List<EDecision> decisions, EDecision type)
         {
             if (decisions.Count == 0)
-            {
                 throw new ArgumentException("List of decisions cannot be empty.");
-            }
-            decimal count = decisions.Where(x => x == type).Count();
-            decimal total = decisions.Count();
+
+            decimal count = decisions.Count(x => x == type);
+            decimal total = decisions.Count;
+
             return (count / total) * 100.0m;
         }
 
-        internal List<Trade> GetTrades()
+        public List<Trade> GetTrades()
         {
-            IReadOnlyList<Trade> tradeList = tradeManager.ClosedTrades;
+            IReadOnlyList<Trade> tradeList = TradeManager.ClosedTrades;
             return tradeList.ToList();
         }
     }

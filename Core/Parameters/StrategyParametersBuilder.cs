@@ -13,7 +13,7 @@ namespace App.Core.Parameters
         {
             Random random = new Random();
             StrategyParameters parameters = new StrategyParameters();
-            decimal basedTradeAmountPercentage = (decimal)Config.GetInstance().GetConfig("basedTradeAmountPercentage");
+            decimal basedTradeAmountPercentage = Config.GetInstance().Get<decimal>("basedTradeAmountPercentage");
 
             parameters.AddParameterVariation("Global", new GlobalParameterVariation()
             {
@@ -21,12 +21,13 @@ namespace App.Core.Parameters
                 SellRatioToTrade = random.Next(28, 33),
                 TradeAmountPercentage = random.Next(-1, 2) + basedTradeAmountPercentage,
                 PayOffRatio = (decimal)random.Next(15, 25) / 10
+            })
+            .AddParameterVariation("RSI", new RSIParameterVariation()
+            {
+                Period = random.Next(13, 16),
+                SellThreshold = random.Next(65, 75),
+                BuyThreshold = random.Next(25, 35)
             });
-
-            parameters.AddParameterVariation("RSI", new RSIParameterVariation() {
-                Period = random.Next(13,16), 
-                SellThreshold = random.Next(65, 75), 
-                BuyThreshold = random.Next(25, 35) });     
 
             return parameters;
         }

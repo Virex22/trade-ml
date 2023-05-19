@@ -13,15 +13,12 @@ namespace App.Core.Indicator
 
         public decimal Calculate(params object[] objects)
         {
-            decimal totalGain = 0;
-            decimal totalLoss = 0;
             List<Candle> candles = (List<Candle>)objects[0];
+            decimal totalGain = 0, totalLoss = 0;
             int period = candles.Count;
 
             if (period < 2)
-            {
                 throw new ArgumentException("List of candles must contain at least 2 elements.");
-            }
 
             for (int i = 1; i < period; i++)
             {

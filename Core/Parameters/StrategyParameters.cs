@@ -12,15 +12,16 @@ namespace App.Core.Parameters
         [Newtonsoft.Json.JsonProperty("ParameterVariations")]
         private Dictionary<string, AbstractParameterVariation> parameterVariations = new Dictionary<string, AbstractParameterVariation>();
 
-        public void AddParameterVariation(string predictorName, AbstractParameterVariation variation)
+        public StrategyParameters AddParameterVariation(string predictorName, AbstractParameterVariation variation)
         {
             parameterVariations[predictorName] = variation;
+            return this;
         }
 
         public StrategyParameters Derive()
         {
             StrategyParameters strategyParameters = new StrategyParameters();
-            foreach (KeyValuePair<string, AbstractParameterVariation> parameterVariation in parameterVariations)
+            foreach (var parameterVariation in parameterVariations)
                 strategyParameters.AddParameterVariation(parameterVariation.Key, parameterVariation.Value.Derive());
             return strategyParameters;
         }
@@ -35,8 +36,7 @@ namespace App.Core.Parameters
 
         public void RemoveParameterVariation(string predictorName)
         {
-            if (parameterVariations.ContainsKey(predictorName))
-                parameterVariations.Remove(predictorName);
+            parameterVariations.Remove(predictorName);
         }
     }
 }

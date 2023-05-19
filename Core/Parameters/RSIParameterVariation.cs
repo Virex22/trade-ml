@@ -23,15 +23,5 @@ namespace App.Core.Parameters
                 Period = (int) this.DeriveDecimal(this.Period, 1, 1)
             };
         }
-
-        private decimal DeriveThreshold(decimal value)
-        {
-            return value + (this.random.Next(-2, 3)) * 0.5m;
-        }
-
-        private int DeriveRSIPeriod(int value)
-        {
-            return value + (this.random.Next(-1,2));
-        }
     }
 }

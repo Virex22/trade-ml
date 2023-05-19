@@ -23,16 +23,13 @@ namespace App.Core.Reporting
             };
             Report report = new Report(Report.ReportType.SINGLE, reportData);
 
-
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(report, Newtonsoft.Json.Formatting.Indented);
 
-            string path = Config.GetInstance().GetConfig("reportPath") + DateTime.Now.ToString("yyyyMMdd") + "\\";
+            string path = Path.Combine(Config.GetInstance().Get<string>("reportPath"), DateTime.Now.ToString("yyyyMMdd"));
             string fileName = "report_" + DateTime.Now.ToString("HHmmss") + ".json";
+            string fullPath = Path.Combine(path, fileName);
 
-            string fullPath = path + fileName;
-
-            if (!Directory.Exists(path))
-                Directory.CreateDirectory(path);
+            Directory.CreateDirectory(path);
 
             File.WriteAllText(fullPath, json);
             Console.WriteLine("Report generated at " + fullPath);

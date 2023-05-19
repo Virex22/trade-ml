@@ -9,15 +9,18 @@ namespace App.Entity
 {
     public class Report
     {
-        public enum ReportType {
+        public enum ReportType
+        {
             SINGLE,
             WAVES
         }
+
         [JsonProperty("DataType")]
-        private string DataType;
+        private string DataType { get; set; }
 
         [JsonIgnore]
-        ReportType Type { 
+        public ReportType Type
+        {
             get
             {
                 return (ReportType)Enum.Parse(typeof(ReportType), DataType);
@@ -27,12 +30,13 @@ namespace App.Entity
                 DataType = value.ToString();
             }
         }
+
         public object Data { get; set; }
 
         public Report(ReportType type, object data)
         {
             Type = type;
-            this.Data = data;
+            Data = data;
         }
     }
 }

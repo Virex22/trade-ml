@@ -10,10 +10,10 @@ namespace App.Core.DataSet
 {
     abstract public class AbstractDataSet : IObservable<AbstractDataSet>
     {
-        private List<IObserver<AbstractDataSet>> observers = new List<IObserver<AbstractDataSet>>();
+        private readonly List<IObserver<AbstractDataSet>> observers = new List<IObserver<AbstractDataSet>>();
+
         public List<Candle> Data { get; set; }
         public int CurrentIndex { get; protected set; }
-
         public decimal CurrentPrice => Data[CurrentIndex].Close;
 
         public AbstractDataSet()
@@ -25,25 +25,21 @@ namespace App.Core.DataSet
         {
             if (!observers.Contains(observer))
                 observers.Add(observer);
+
             return EmptyDisposable.Instance;
         }
 
-        protected void Notify()
-        {
-            foreach (var observer in observers)
-                observer.OnNext(this);
-        }
+        protected void Notify() => NotifyObservers(observer => observer.OnNext(this));
+        protected void NotifyComplete() => NotifyObservers(observer => observer.OnCompleted());
 
-        protected void NotifyComplete()
+        protected void NotifyObservers(Action<IObserver<AbstractDataSet>> action)
         {
             foreach (var observer in observers)
-                observer.OnCompleted();
+                action(observer);
         }
 
         abstract public void Load();
-
         abstract public void Start();
-
         abstract public DateTimeOffset GetCurrentTime();
     }
 }

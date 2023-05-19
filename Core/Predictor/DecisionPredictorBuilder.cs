@@ -9,7 +9,7 @@ namespace App.Core.Predictor
     {
         public static DecisionPredictor Build(StrategyParameters strategyParameters, DecisionMaker decisionMaker)
         {
-            List<AbstractPredictor> predictors = new List<AbstractPredictor>
+            List<AbstractPredictor> predictors = new()
             {
                 new RSIPredictor(decisionMaker, new RSIIndicator(), (RSIParameterVariation)strategyParameters.GetParameterVariation("RSI"))
             };

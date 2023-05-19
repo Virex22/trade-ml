@@ -18,12 +18,9 @@ namespace App.Core.Predictor
 
         public List<EDecision> MakeDecision()
         {
-            List<EDecision> decisions = new List<EDecision>();
+            List<EDecision> decisionList = predictors.Select(predictor => predictor.MakeDecision()).ToList();
 
-            foreach (AbstractPredictor predictor in predictors)
-                decisions.Add(predictor.MakeDecision());
-
-            return decisions;
+            return decisionList;
         }
     }
 }
