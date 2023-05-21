@@ -33,7 +33,7 @@ namespace App.Core.Predictor.ConcretePredictor
 
         private List<Candle> GetCandles()
         {
-            AbstractDataSet? dataSet = this.decisionMaker.subscribedDataSet;
+            AbstractDataSet? dataSet = this.decisionMaker.SubscribedDataSet;
             if (dataSet == null)
                 throw new InvalidOperationException("DataSet is not subscribed");
 

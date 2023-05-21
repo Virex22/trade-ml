@@ -18,7 +18,7 @@ namespace App.Core.Reporting
             {
                 Result = decisionMaker.GetResults(),
                 Trades = decisionMaker.GetTrades(),
-                InitialBalance = decisionMaker.initialBalance,
+                InitialBalance = decisionMaker.InitialBalance,
                 StrategyParameters = strategy
             };
             Report report = new Report(Report.ReportType.SINGLE, reportData);

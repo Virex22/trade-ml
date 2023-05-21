@@ -24,10 +24,7 @@ namespace App.Entity
                 throw new System.Exception("Config file not found");
 
             string json = File.ReadAllText(configFilePath);
-            config = JsonConvert.DeserializeObject<dynamic>(json);
-
-            if (config == null)
-                throw new System.Exception("Config file is empty");
+            this.config = JsonConvert.DeserializeObject<dynamic>(json) ?? throw new System.Exception("Config file is empty");
         }
 
         private void ConfigTreatment()
