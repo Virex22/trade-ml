@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,33 +10,20 @@ namespace App.Entity
 {
     public class Report
     {
+        [JsonConverter(typeof(StringEnumConverter))]
         public enum ReportType
         {
             SINGLE,
             WAVES
         }
 
-        [JsonProperty("DataType")]
-        private string DataType { get; set; }
-
-        [JsonIgnore]
-        public ReportType Type
-        {
-            get
-            {
-                return (ReportType)Enum.Parse(typeof(ReportType), DataType);
-            }
-            set
-            {
-                DataType = value.ToString();
-            }
-        }
+        public ReportType DataType { get; set; }
 
         public object Data { get; set; }
 
         public Report(ReportType type, object data)
         {
-            Type = type;
+            DataType = type;
             Data = data;
         }
     }

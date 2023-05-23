@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,13 +10,14 @@ namespace App.Entity
 {
     public class Trade
     {
-        public enum TradeType
+        [JsonConverter(typeof(StringEnumConverter))]
+        public enum ETradeType
         {
             Buy,
             Sell
         }
 
-        public TradeType Type { get; private set; }
+        public ETradeType Type { get; private set; }
         public decimal EntryPrice { get; private set; }
         public DateTimeOffset EntryTime { get; private set; }
         public decimal StopLossPrice { get; private set; }
@@ -24,7 +27,7 @@ namespace App.Entity
         public decimal Amount { get; private set; }
         public decimal? ProfitLoss { get; private set; }
 
-        public Trade(TradeType type, Candle candle, decimal stopLossPrice, decimal takeProfitPrice , decimal Amount)
+        public Trade(ETradeType type, Candle candle, decimal stopLossPrice, decimal takeProfitPrice , decimal Amount)
         {
             Type = type;
             EntryPrice = candle.Close;
@@ -32,7 +35,6 @@ namespace App.Entity
             TakeProfitPrice = takeProfitPrice;
             EntryTime = candle.CloseTime;
             this.Amount = Amount;
-            Console.WriteLine("Amount :" + Amount);
         }
 
         public decimal Close(decimal closePrice, DateTimeOffset time)
@@ -41,11 +43,10 @@ namespace App.Entity
             ClosePrice = closePrice;
 
             decimal profitLoss;
-            if (Type == TradeType.Buy)
+            if (Type == ETradeType.Buy)
                 profitLoss = (closePrice - EntryPrice) * (Amount / EntryPrice);
             else
                 profitLoss = (EntryPrice - closePrice) * (Amount / EntryPrice);
-            Console.WriteLine("profit :" + profitLoss + "\r\n");
 
             ProfitLoss = profitLoss;
 
@@ -58,7 +59,7 @@ namespace App.Entity
 
             decimal profitLoss = 0;
 
-            if (Type == TradeType.Buy)
+            if (Type == ETradeType.Buy)
                 profitLoss = (candle.Close - EntryPrice) * (Amount / EntryPrice);
             else
                 profitLoss = (EntryPrice - candle.Close) * (Amount / EntryPrice);
@@ -75,7 +76,7 @@ namespace App.Entity
 
         public bool HasReachedStopLoss(decimal currentPrice)
         {
-            if (Type == TradeType.Buy)
+            if (Type == ETradeType.Buy)
                 return currentPrice <= StopLossPrice;
             else
                 return currentPrice >= StopLossPrice;
@@ -83,7 +84,7 @@ namespace App.Entity
 
         public bool HasReachedTakeProfit(decimal currentPrice)
         {
-            if (Type == TradeType.Buy)
+            if (Type == ETradeType.Buy)
                 return currentPrice >= TakeProfitPrice;
             else
                 return currentPrice <= TakeProfitPrice;

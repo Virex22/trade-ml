@@ -91,7 +91,7 @@ namespace App.Core
             if (buyRatePercentage >= GlobalParameterVariation.BuyRatioToTrade)
             {
                 TradeManager.OpenTrade(
-                    Trade.TradeType.Buy,
+                    Trade.ETradeType.Buy,
                     currentCandle,
                     SubscribedDataSet.CurrentPrice - 100,
                     SubscribedDataSet.CurrentPrice + 150 * GlobalParameterVariation.PayOffRatio,
@@ -101,7 +101,7 @@ namespace App.Core
             else if (sellRatePercentage >= GlobalParameterVariation.SellRatioToTrade)
             {
                 TradeManager.OpenTrade(
-                    Trade.TradeType.Sell,
+                    Trade.ETradeType.Sell,
                     currentCandle,
                     SubscribedDataSet.CurrentPrice + 100,
                     SubscribedDataSet.CurrentPrice - 150 * GlobalParameterVariation.PayOffRatio,

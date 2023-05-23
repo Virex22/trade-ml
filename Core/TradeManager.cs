@@ -25,7 +25,7 @@ namespace App.Core
             this.Wallet = wallet;
         }
 
-        public void OpenTrade(Trade.TradeType type, Candle candle, decimal stopLossPrice, decimal takeProfitPrice, decimal amountToTrade)
+        public void OpenTrade(Trade.ETradeType type, Candle candle, decimal stopLossPrice, decimal takeProfitPrice, decimal amountToTrade)
         {
             if (!IsEligible(type))
                 return;
@@ -43,12 +43,12 @@ namespace App.Core
             activeTrades.Add(trade);
         }
 
-        private bool IsEligible(Trade.TradeType type)
+        private bool IsEligible(Trade.ETradeType type)
         {
-            if (type == Trade.TradeType.Buy)
-                return !activeTrades.Any(t => t.Type == Trade.TradeType.Buy);
+            if (type == Trade.ETradeType.Buy)
+                return !activeTrades.Any(t => t.Type == Trade.ETradeType.Buy);
             else
-                return !activeTrades.Any(t => t.Type == Trade.TradeType.Sell);
+                return !activeTrades.Any(t => t.Type == Trade.ETradeType.Sell);
         }
 
         public void OnNext(AbstractDataSet marketData)
