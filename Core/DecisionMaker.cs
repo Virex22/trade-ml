@@ -16,7 +16,7 @@ namespace App.Core
         public AbstractDataSet? SubscribedDataSet { get; private set; }
         public decimal InitialBalance { get; private set; }
 
-        private DecisionPredictor Predictor { get; }
+        private PredictorCollection Predictor { get; }
         private TradeManager TradeManager { get; }
         private GlobalParameterVariation GlobalParameterVariation { get; }
         private Wallet Wallet { get; }
@@ -26,7 +26,7 @@ namespace App.Core
 
         public DecisionMaker(StrategyParameters strategy, decimal initialBalance = 1000)
         {
-            Predictor = DecisionPredictorBuilder.Build(strategy, this);
+            Predictor = PredictorBuilder.Build(strategy, this);
             Wallet = new Wallet(initialBalance);
             GlobalParameterVariation = (GlobalParameterVariation)strategy.GetParameterVariation("Global");
             TradeManager = new TradeManager(Wallet);
@@ -48,7 +48,7 @@ namespace App.Core
             if (SubscribedDataSet == null)
                 SubscribedDataSet = dataSet;
 
-            List<EDecision> decisions = Predictor.MakeDecision();
+            List<EDecision> decisions = Predictor.GetDecision();
 
             decimal buyRatePercentage = CalculateRatePercentage(decisions, EDecision.BUY);
             decimal sellRatePercentage = CalculateRatePercentage(decisions, EDecision.SELL);
