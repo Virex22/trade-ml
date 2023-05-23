@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace App.Enumerator
 {
-    public enum EDecision
+    public enum ETrend
     {
-        Hold,
-        Buy,
-        Sell
+        Bullish,
+        Bearish,
+        Range
     }
 }

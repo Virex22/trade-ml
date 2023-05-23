@@ -22,11 +22,11 @@ namespace App.Core.Predictor.Decision
             decimal RSIValue = rsiIndicator.Calculate(GetLastCandles(parameters.Period));
 
             if (parameters.SellThreshold < RSIValue)
-                return EDecision.SELL;
+                return EDecision.Sell;
             else if (parameters.BuyThreshold > RSIValue)
-                return EDecision.BUY;
+                return EDecision.Buy;
             else
-                return EDecision.HOLD;
+                return EDecision.Hold;
         }
     }
 }

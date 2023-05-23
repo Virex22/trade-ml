@@ -50,8 +50,8 @@ namespace App.Core
 
             List<EDecision> decisions = Predictor.GetDecision();
 
-            decimal buyRatePercentage = CalculateRatePercentage(decisions, EDecision.BUY);
-            decimal sellRatePercentage = CalculateRatePercentage(decisions, EDecision.SELL);
+            decimal buyRatePercentage = CalculateRatePercentage(decisions, EDecision.Buy);
+            decimal sellRatePercentage = CalculateRatePercentage(decisions, EDecision.Sell);
 
             MakeDecision(buyRatePercentage, sellRatePercentage);
         }
