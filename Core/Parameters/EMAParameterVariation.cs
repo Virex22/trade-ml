@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace App.Core.Parameters
 {
-    public class SMAParameterVariation : AbstractParameterVariation
+    public class EMAParameterVariation : AbstractParameterVariation
     {
         public int MiddlePeriod { get; set; }
         public int GapBetweenMiddles { get; set; }
@@ -19,7 +19,7 @@ namespace App.Core.Parameters
             if (newMiddlePeriod - newGapBetweenMiddles < 2)
                 newGapBetweenMiddles = newMiddlePeriod - 2;
 
-            return new SMAParameterVariation()
+            return new EMAParameterVariation()
             {
                 MiddlePeriod = newMiddlePeriod,
                 GapBetweenMiddles = newGapBetweenMiddles

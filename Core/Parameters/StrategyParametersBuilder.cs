@@ -32,7 +32,13 @@ namespace App.Core.Parameters
             {
                 MiddlePeriod = random.Next(10, 20),
                 GapBetweenMiddles = random.Next(1, 10)
-            });
+            })
+            .AddParameterVariation("EMA", new EMAParameterVariation()
+            {
+                MiddlePeriod = random.Next(10, 20),
+                GapBetweenMiddles = random.Next(1, 10)
+            })
+            ;
 
             return parameters;
         }
