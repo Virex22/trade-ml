@@ -38,6 +38,12 @@ namespace App.Core.Parameters
                 MiddlePeriod = random.Next(10, 20),
                 GapBetweenMiddles = random.Next(1, 10)
             })
+            .AddParameterVariation("ATR",new ATRParameterVariation()
+            {
+                Period = random.Next(10, 20),
+                StrongThreshold = (decimal)random.Next(10, 50) / 100,
+                WeakThreshold = (decimal)random.Next(10, 50) / 100
+            })
             ;
 
             return parameters;

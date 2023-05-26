@@ -10,6 +10,9 @@ namespace App.Core.Indicator
 {
     public class ATRIndicator : IIndicator<decimal>
     {
+        public decimal ATRAverage { get; set; }
+        private List<decimal> ATRLastValue = new List<decimal>();
+
         public decimal Calculate(params object[] objects)
         {
             List<Candle> candles = (List<Candle>)objects[0];
@@ -34,7 +37,18 @@ namespace App.Core.Indicator
 
             decimal averageTrueRange = trueRanges.Sum() / (period - 1);
 
+            RegisterLastValue(averageTrueRange, period);
+
             return averageTrueRange;
+        }
+
+        private void RegisterLastValue(decimal value, int period)
+        {
+            ATRLastValue.Add(value);
+            if (ATRLastValue.Count > period)
+                ATRLastValue.RemoveAt(0);
+
+            ATRAverage = ATRLastValue.Sum() / ATRLastValue.Count;
         }
     }
 }
