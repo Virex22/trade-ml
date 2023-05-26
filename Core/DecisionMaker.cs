@@ -3,11 +3,6 @@ using App.Core.Parameters;
 using App.Core.Predictor;
 using App.Entity;
 using App.Enumerator;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace App.Core
 {

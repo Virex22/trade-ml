@@ -1,12 +1,5 @@
 ﻿using App.Core.DataSet;
-using App.Core.Parameters;
 using App.Entity;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace App.Core
 {

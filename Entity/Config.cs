@@ -1,6 +1,5 @@
 ﻿using App.Enumerator;
 using Newtonsoft.Json;
-using System;
 
 
 namespace App.Entity

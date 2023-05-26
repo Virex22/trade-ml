@@ -1,9 +1,6 @@
-﻿using App.Core.DataSet;
-using App.Core.Indicator;
+﻿using App.Core.Indicator;
 using App.Core.Parameters.ParameterVariations;
-using App.Entity;
 using App.Enumerator;
-using System.Data;
 
 namespace App.Core.Predictor.Decision
 {
