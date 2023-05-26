@@ -52,6 +52,7 @@ namespace App.Entity
 
             return Amount + profitLoss;
         }
+
         public decimal Close(Candle candle)
         {
             CloseTime = candle.CloseTime;

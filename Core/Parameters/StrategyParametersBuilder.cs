@@ -27,6 +27,11 @@ namespace App.Core.Parameters
                 Period = random.Next(13, 16),
                 SellThreshold = random.Next(65, 75),
                 BuyThreshold = random.Next(25, 35)
+            })
+            .AddParameterVariation("SMA", new SMAParameterVariation()
+            {
+                MiddlePeriod = random.Next(10, 20),
+                GapBetweenMiddles = random.Next(1, 10)
             });
 
             return parameters;

@@ -9,16 +9,15 @@ namespace App.Core.Predictor.Decision
 {
     public class RSIPredictor : AbstractDecisionPredictor
     {
-        private readonly RSIParameterVariation parameters;
-
-        public RSIPredictor(DecisionMaker decisionMaker, RSIIndicator indicator, RSIParameterVariation parameters) : base(indicator, decisionMaker)
+        public RSIPredictor(RSIIndicator indicator, DecisionMaker decisionMaker, RSIParameterVariation parameters) : base(indicator, decisionMaker, parameters)
         {
-            this.parameters = parameters;
         }
 
         public override EDecision GetDecision()
         {
             RSIIndicator rsiIndicator = (RSIIndicator)indicator;
+            RSIParameterVariation parameters = (RSIParameterVariation)this.parameters;
+
             decimal RSIValue = rsiIndicator.Calculate(GetLastCandles(parameters.Period));
 
             if (parameters.SellThreshold < RSIValue)

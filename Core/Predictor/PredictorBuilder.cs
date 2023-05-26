@@ -11,7 +11,7 @@ namespace App.Core.Predictor
         {
             List<AbstractPredictor> predictors = new()
             {
-                new RSIPredictor(decisionMaker, new RSIIndicator(), (RSIParameterVariation)strategyParameters.GetParameterVariation("RSI"))
+                new RSIPredictor(new RSIIndicator(), decisionMaker, (RSIParameterVariation)strategyParameters.GetParameterVariation("RSI"))
             };
 
             return new PredictorCollection(predictors);

@@ -15,11 +15,13 @@ namespace App.Core.Predictor
     {
         protected readonly IIndicator indicator;
         protected readonly DecisionMaker decisionMaker;
+        protected readonly AbstractParameterVariation parameters;
 
-        public AbstractPredictor(IIndicator indicator, DecisionMaker decisionMaker)
+        public AbstractPredictor(IIndicator indicator, DecisionMaker decisionMaker, AbstractParameterVariation parameters)
         {
             this.indicator = indicator;
             this.decisionMaker = decisionMaker;
+            this.parameters = parameters;
         }
 
         protected List<Candle> GetLastCandles(int period)
