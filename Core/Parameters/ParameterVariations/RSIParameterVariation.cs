@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace App.Core.Parameters
+namespace App.Core.Parameters.ParameterVariations
 {
     public class RSIParameterVariation : AbstractParameterVariation
     {
-        public decimal BuyThreshold { get; set;}
+        public decimal BuyThreshold { get; set; }
 
         public decimal SellThreshold { get; set; }
 
@@ -18,9 +18,9 @@ namespace App.Core.Parameters
         {
             return new RSIParameterVariation()
             {
-                BuyThreshold = this.DeriveDecimal(this.BuyThreshold, 0.5m, 2),
-                SellThreshold = this.DeriveDecimal(this.SellThreshold, 0.5m, 2),
-                Period = (int) this.DeriveDecimal(this.Period, 1, 1)
+                BuyThreshold = DeriveDecimal(BuyThreshold, 0.5m, 2),
+                SellThreshold = DeriveDecimal(SellThreshold, 0.5m, 2),
+                Period = (int)DeriveDecimal(Period, 1, 1)
             };
         }
     }

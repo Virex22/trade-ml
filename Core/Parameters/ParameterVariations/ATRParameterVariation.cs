@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace App.Core.Parameters
+namespace App.Core.Parameters.ParameterVariations
 {
     public class ATRParameterVariation : AbstractParameterVariation
     {
@@ -24,9 +24,9 @@ namespace App.Core.Parameters
         {
             return new ATRParameterVariation()
             {
-                Period = (int)this.DeriveDecimal(this.Period, 1, 1, 10, 50),
-                StrongThreshold = this.DeriveDecimal(this.StrongThreshold, 0.1m, 0.1m, 0.1m, 0.9m),
-                WeakThreshold = this.DeriveDecimal(this.WeakThreshold, 0.1m, 0.1m, 0.1m, 0.9m)
+                Period = (int)DeriveDecimal(Period, 1, 1, 10, 50),
+                StrongThreshold = DeriveDecimal(StrongThreshold, 0.1m, 0.1m, 0.1m, 0.9m),
+                WeakThreshold = DeriveDecimal(WeakThreshold, 0.1m, 0.1m, 0.1m, 0.9m)
             };
         }
     }

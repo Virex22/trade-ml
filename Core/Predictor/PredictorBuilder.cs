@@ -1,5 +1,6 @@
 ﻿using App.Core.Indicator;
 using App.Core.Parameters;
+using App.Core.Parameters.ParameterVariations;
 using App.Core.Predictor.Decision;
 using App.Interface;
 

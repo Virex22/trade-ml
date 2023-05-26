@@ -1,6 +1,6 @@
 ﻿using App.Core.DataSet;
 using App.Core.Indicator;
-using App.Core.Parameters;
+using App.Core.Parameters.ParameterVariations;
 using App.Enumerator;
 using App.Interface;
 using System;
