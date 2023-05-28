@@ -10,6 +10,7 @@ namespace App.Core
     {
         public AbstractDataSet? SubscribedDataSet { get; private set; }
         public decimal InitialBalance { get; private set; }
+        public decimal Balance => Wallet.Balance;
 
         private PredictorCollection Predictor { get; }
         private TradeManager TradeManager { get; }
@@ -18,12 +19,11 @@ namespace App.Core
         private DateTime StartingTime { get; set; }
         private DateTime EndTime { get; set; }
 
-
         public DecisionMaker(StrategyParameters strategy, decimal initialBalance = 1000)
         {
             Predictor = PredictorBuilder.Build(strategy, this);
             Wallet = new Wallet(initialBalance);
-            GlobalParameterVariation = (GlobalParameterVariation)strategy.GetParameterVariation("Global");
+            GlobalParameterVariation = (GlobalParameterVariation)strategy.Get("Global");
             TradeManager = new TradeManager(Wallet);
             InitialBalance = initialBalance;
         }
@@ -82,6 +82,8 @@ namespace App.Core
             Candle currentCandle = SubscribedDataSet.Data[SubscribedDataSet.CurrentIndex];
 
             decimal amountToTrade = GlobalParameterVariation.TradeAmountPercentage * Wallet.Balance / 100;
+
+            
 
             if (buyRatePercentage >= GlobalParameterVariation.BuyRatioToTrade)
             {

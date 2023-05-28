@@ -7,7 +7,7 @@ namespace App.Core.Parameters
         [Newtonsoft.Json.JsonProperty("ParameterVariations")]
         private Dictionary<string, AbstractParameterVariation> parameterVariations = new Dictionary<string, AbstractParameterVariation>();
 
-        public StrategyParameters AddParameterVariation(string predictorName, AbstractParameterVariation variation)
+        public StrategyParameters Add(string predictorName, AbstractParameterVariation variation)
         {
             parameterVariations[predictorName] = variation;
             return this;
@@ -17,11 +17,11 @@ namespace App.Core.Parameters
         {
             StrategyParameters strategyParameters = new StrategyParameters();
             foreach (var parameterVariation in parameterVariations)
-                strategyParameters.AddParameterVariation(parameterVariation.Key, parameterVariation.Value.Derive());
+                strategyParameters.Add(parameterVariation.Key, parameterVariation.Value.Derive());
             return strategyParameters;
         }
 
-        public AbstractParameterVariation GetParameterVariation(string predictorName)
+        public AbstractParameterVariation Get(string predictorName)
         {
             if (parameterVariations.ContainsKey(predictorName))
                 return parameterVariations[predictorName];
@@ -29,7 +29,7 @@ namespace App.Core.Parameters
                 throw new ArgumentException($"No parameter variation found for predictor '{predictorName}'.");
         }
 
-        public void RemoveParameterVariation(string predictorName)
+        public void Remove(string predictorName)
         {
             parameterVariations.Remove(predictorName);
         }

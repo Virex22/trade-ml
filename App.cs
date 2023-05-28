@@ -13,8 +13,8 @@ namespace App
             Console.WriteLine("La configuration utilisée est la suivante :");
             Config.GetInstance().Debug();
 
-            StrategyParameters strategy = StrategyParametersBuilder.BuildRandom();
-            DecisionMaker trader = new DecisionMaker(strategy, Config.GetInstance().Get<decimal>("initialAmount"));
+            StrategyParameters strategyParameters = StrategyParametersBuilder.BuildRandom();
+            DecisionMaker trader = new DecisionMaker(strategyParameters, Config.GetInstance().Get<decimal>("initialAmount"));
             TestingDataSet market = new TestingDataSet();
 
             trader.SetSubscribedDataSet(market);
@@ -22,7 +22,7 @@ namespace App
             market.Load();
             market.Start();
 
-            ReportGenerator.GenerateSingleTestReport(trader,strategy);
+            ReportGenerator.GenerateSingleTestReport(trader, strategyParameters);
 
             trader.GetResults().Debug();
         }
