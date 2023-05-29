@@ -2,19 +2,22 @@
 using App.Core.Parameters;
 using App.Core.Parameters.ParameterVariations;
 using App.Core.Predictor.Decision;
+using App.Entity;
 
 namespace App.Core.Predictor
 {
     public static class PredictorBuilder
     {
-        public static PredictorCollection Build(StrategyParameters strategyParameters, DecisionMaker decisionMaker)
+        public static TradingStrategy Build(StrategyParameters strategyParameters, DecisionMaker decisionMaker)
         {
-            List<AbstractPredictor> predictors = new()
-            {
-                new RSIPredictor(new RSIIndicator(), decisionMaker, (RSIParameterVariation)strategyParameters.Get("RSI"))
-            };
+            TradingStrategy tradingStrategy = new TradingStrategy();
 
-            return new PredictorCollection(predictors);
+            tradingStrategy.AddDecision(
+                new RSIPredictor(new RSIIndicator(), decisionMaker, (RSIParameterVariation)strategyParameters.Get("RSI"))
+            )
+            ;
+
+            return tradingStrategy;
         }
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App.Interface
 {
-    public interface IEffect<T>
+    public interface IEffect
     {
-        public T UseEffect(T initialValue, DecisionMaker decisionMaker);
+        public decimal UseEffect(decimal initialValue, DecisionMaker decisionMaker);
     }
 }

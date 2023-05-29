@@ -12,7 +12,7 @@ namespace App.Core
         public decimal InitialBalance { get; private set; }
         public decimal Balance => Wallet.Balance;
 
-        private PredictorCollection Predictor { get; }
+        private TradingStrategy TradingStrategy { get; }
         private TradeManager TradeManager { get; }
         private GlobalParameterVariation GlobalParameterVariation { get; }
         private Wallet Wallet { get; }
@@ -21,7 +21,7 @@ namespace App.Core
 
         public DecisionMaker(StrategyParameters strategy, decimal initialBalance = 1000)
         {
-            Predictor = PredictorBuilder.Build(strategy, this);
+            this.TradingStrategy = PredictorBuilder.Build(strategy, this);
             Wallet = new Wallet(initialBalance);
             GlobalParameterVariation = (GlobalParameterVariation)strategy.Get("Global");
             TradeManager = new TradeManager(Wallet);
@@ -43,7 +43,7 @@ namespace App.Core
             if (SubscribedDataSet == null)
                 SubscribedDataSet = dataSet;
 
-            List<EDecision> decisions = Predictor.GetDecision();
+            List<EDecision> decisions = TradingStrategy.GetDecisions();
 
             decimal buyRatePercentage = CalculateRatePercentage(decisions, EDecision.Buy);
             decimal sellRatePercentage = CalculateRatePercentage(decisions, EDecision.Sell);

@@ -4,7 +4,7 @@ using App.Enumerator;
 
 namespace App.Core.Predictor.Strength
 {
-    public class ATRStrengthPredictor : StrengthPredictor
+    public class ATRStrengthPredictor : AbstractStrengthPredictor
     {
 
         public ATRStrengthPredictor(ATRIndicator indicator, DecisionMaker decisionMaker, ATRParameterVariation parameters)

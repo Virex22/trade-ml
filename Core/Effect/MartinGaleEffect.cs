@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace App.Core.Effect
 {
-    public class MartinGaleEffect : IEffect<decimal>
+    public class MartinGaleEffect : IEffect
     {
         private StrategyParameters strategyParameters;
         private int lossesCount = 0;
