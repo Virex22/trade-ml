@@ -3,6 +3,7 @@ using App.Core.Parameters;
 using App.Core.Predictor;
 using App.Entity;
 using App.Enumerator;
+using App.Interface;
 
 namespace App.Core
 {
@@ -82,8 +83,9 @@ namespace App.Core
             Candle currentCandle = SubscribedDataSet.Data[SubscribedDataSet.CurrentIndex];
 
             decimal amountToTrade = GlobalParameterVariation.TradeAmountPercentage * Wallet.Balance / 100;
-
             
+            foreach (IEffect effect in TradingStrategy.GetEffects())
+                amountToTrade = effect.UseEffect(amountToTrade, this);
 
             if (buyRatePercentage >= GlobalParameterVariation.BuyRatioToTrade)
             {

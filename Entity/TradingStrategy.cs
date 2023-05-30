@@ -1,4 +1,5 @@
-﻿using App.Core.Predictor.Decision;
+﻿using App.Core;
+using App.Core.Predictor.Decision;
 using App.Core.Predictor.Strength;
 using App.Core.Predictor.Trend;
 using App.Enumerator;
@@ -53,6 +54,11 @@ namespace App.Entity
                 decisions.Add(decision.GetDecision());
 
             return decisions;
+        }
+
+        public List<IEffect> GetEffects()
+        {
+            return effects;
         }
     }
 }

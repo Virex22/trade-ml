@@ -7,7 +7,7 @@
   "testIntervalDay": 10,
   "variationAmplitudeCoef": 3,
   "initialAmount": 1000,
-  "basedTradeAmountPercentage": 10,
+  "basedTradeAmountPercentage": 1,
   "plateformFeePercentage": 0.1,
   "histMinDataBufferLen":  100
 }

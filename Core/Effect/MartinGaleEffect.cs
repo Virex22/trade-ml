@@ -1,4 +1,5 @@
-﻿using App.Core.Parameters;
+﻿using App.Core.Event;
+using App.Core.Parameters;
 using App.Core.Parameters.ParameterVariations;
 using App.Interface;
 using System;
@@ -16,6 +17,7 @@ namespace App.Core.Effect
 
         public MartinGaleEffect(StrategyParameters strategy) {
             this.strategyParameters = strategy;
+            EventBus.GetInstance().Subscribe<TradeEvent>(triggerFinishedTrade);
         }
         public decimal UseEffect(decimal initialValue, DecisionMaker decisionMaker) {
             MartinGaleParameterVariation parameter = (MartinGaleParameterVariation)strategyParameters.Get("MartinGale");
@@ -25,16 +27,17 @@ namespace App.Core.Effect
             if (lossesCount == 0)
                 return initialValue;
 
-            decimal amount = initialValue * parameter.Multiplier;
+            decimal amount = initialValue * (parameter.Multiplier * lossesCount);
             if (amount > decisionMaker.Balance * parameter.MaxLossesPercentage / 100)
                return initialValue;
+
                
             return amount;
         }
 
-        public void triggerFinishedTrade(bool isWinTrade)
+        public void triggerFinishedTrade(TradeEvent tradeEvent)
         {
-            if (!isWinTrade)
+            if (!tradeEvent.IsWinTrade)
                 lossesCount++;
             else
                 lossesCount = 0;

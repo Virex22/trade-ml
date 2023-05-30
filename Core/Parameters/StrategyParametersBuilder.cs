@@ -15,7 +15,7 @@ namespace App.Core.Parameters
             {
                 BuyRatioToTrade = random.Next(28, 33),
                 SellRatioToTrade = random.Next(28, 33),
-                TradeAmountPercentage = random.Next(-1, 2) + basedTradeAmountPercentage,
+                TradeAmountPercentage = random.Next(0, 2) + basedTradeAmountPercentage,
                 PayOffRatio = (decimal)random.Next(15, 25) / 10
             })
             .Add("RSI", new RSIParameterVariation()
