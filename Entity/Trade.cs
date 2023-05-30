@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using App.Core.Event;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace App.Entity
@@ -44,6 +45,8 @@ namespace App.Entity
                 profitLoss = (EntryPrice - closePrice) * (Amount / EntryPrice);
 
             ProfitLoss = profitLoss;
+
+           EventBus.GetInstance().Publish(new TradeEvent() { IsWinTrade = profitLoss > 0 });
 
             return Amount + profitLoss;
         }
