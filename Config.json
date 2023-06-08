@@ -6,8 +6,10 @@
   "reportPath":  "data/report/",
   "testIntervalDay": 10,
   "variationAmplitudeCoef": 3,
-  "initialAmount": 1000,
+  "initialAmount": 10000,
   "basedTradeAmountPercentage": 1,
   "plateformFeePercentage": 0.1,
-  "histMinDataBufferLen":  100
+  "histMinDataBufferLen": 100,
+  "baseTradeOnLostPercentage": true,
+  "lostPercentage": 0.01
 }

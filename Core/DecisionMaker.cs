@@ -4,6 +4,7 @@ using App.Core.Predictor;
 using App.Entity;
 using App.Enumerator;
 using App.Interface;
+using System.Diagnostics;
 
 namespace App.Core
 {
@@ -79,20 +80,17 @@ namespace App.Core
             if (SubscribedDataSet == null)
                 throw new ArgumentException("Subscribed data set cannot be null.");
 
-
             Candle currentCandle = SubscribedDataSet.Data[SubscribedDataSet.CurrentIndex];
 
-            decimal amountToTrade = GlobalParameterVariation.TradeAmountPercentage * Wallet.Balance / 100;
-            
-            foreach (IEffect effect in TradingStrategy.GetEffects())
-                amountToTrade = effect.UseEffect(amountToTrade, this);
+            decimal amountToTrade = this.CalculateAmountToTrade();
+            decimal lossGap = 100;
 
             if (buyRatePercentage >= GlobalParameterVariation.BuyRatioToTrade)
             {
                 TradeManager.OpenTrade(
                     Trade.ETradeType.Buy,
                     currentCandle,
-                    SubscribedDataSet.CurrentPrice - 100,
+                    SubscribedDataSet.CurrentPrice - lossGap,
                     SubscribedDataSet.CurrentPrice + 150 * GlobalParameterVariation.PayOffRatio,
                     amountToTrade
                 );
@@ -102,10 +100,33 @@ namespace App.Core
                 TradeManager.OpenTrade(
                     Trade.ETradeType.Sell,
                     currentCandle,
-                    SubscribedDataSet.CurrentPrice + 100,
+                    SubscribedDataSet.CurrentPrice + lossGap,
                     SubscribedDataSet.CurrentPrice - 150 * GlobalParameterVariation.PayOffRatio,
                     amountToTrade
                 );
+            }
+        }
+
+        private decimal CalculateAmountToTrade()
+        {
+            bool baseTradeOnLostPercentage = Config.GetInstance().Get<bool>("baseTradeOnLostPercentage");// ex : true
+            decimal lostPercentage = Config.GetInstance().Get<decimal>("lostPercentage");// ex : 0.01
+            if (!baseTradeOnLostPercentage)
+            {
+                decimal amountToTrade = GlobalParameterVariation.TradeAmountPercentage * Wallet.Balance / 100;
+
+                foreach (IEffect effect in TradingStrategy.GetEffects())
+                    amountToTrade = effect.UseEffect(amountToTrade, this);
+                return amountToTrade;
+            }
+            else
+            {
+                decimal marketLossPercentage = (SubscribedDataSet.CurrentPrice - 100 - SubscribedDataSet.CurrentPrice) / SubscribedDataSet.CurrentPrice * 100;
+                decimal balanceLossAmount = Wallet.Balance * lostPercentage;
+                decimal amountToTrade = balanceLossAmount / Math.Abs(marketLossPercentage) * 100;
+                if (amountToTrade > Wallet.Balance)
+                    amountToTrade = Wallet.Balance;
+                return amountToTrade;
             }
         }
 

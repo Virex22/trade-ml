@@ -25,9 +25,7 @@ namespace App.Core.Event
             Type eventType = typeof(T);
 
             if (!eventSubscriptions.ContainsKey(eventType))
-            {
                 eventSubscriptions[eventType] = new List<Action<object>>();
-            }
 
             eventSubscriptions[eventType].Add(obj => handler((T)obj));
         }

@@ -28,10 +28,12 @@ Configuration file is located in `Config.json` file.
   "reportPath":  "data/report/",
   "testIntervalDay": 10,
   "variationAmplitudeCoef": 3,
-  "initialAmount": 1000,  
-  "basedTradeAmountPercentage" : 10,   
+  "initialAmount": 10000,
+  "basedTradeAmountPercentage": 1,
   "plateformFeePercentage": 0.1,
-  "histMinDataBufferLen":  100
+  "histMinDataBufferLen": 100,
+  "baseTradeOnLostPercentage": true,
+  "lostPercentage": 0.01
 }
 ```
 
@@ -48,3 +50,5 @@ Configuration file is located in `Config.json` file.
 - `basedTradeAmountPercentage` : Percentage of the total wallet to trade (ex : 10%)
 - `plateformFeePercentage` : Percentage of the plateform fee (ex : 0.1%)
 - `histMinDataBufferLen` : Minimum number of candle data before starting the trading analysis
+- `baseTradeOnLostPercentage` : If true, the trade amount is based on the lost percentage
+- `lostPercentage` : Percentage of the lost to base the trade amount (ex : 1%)

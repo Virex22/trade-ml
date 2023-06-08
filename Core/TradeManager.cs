@@ -28,6 +28,8 @@ namespace App.Core
                 feePercent = 0;
 
             decimal feeAmount = amountToTrade / 100 * feePercent;
+            if (amountToTrade + feeAmount > Wallet.Balance)
+                amountToTrade = Wallet.Balance - feeAmount;
 
             Wallet.Withdraw(amountToTrade + feeAmount);
 
@@ -38,6 +40,7 @@ namespace App.Core
 
         private bool IsEligible(Trade.ETradeType type)
         {
+            if (Wallet.Balance < Wallet.InitialBalance/2) return false;
             if (type == Trade.ETradeType.Buy)
                 return !activeTrades.Any(t => t.Type == Trade.ETradeType.Buy);
             else

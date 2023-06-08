@@ -16,7 +16,6 @@ namespace App.Core.Predictor
             tradingStrategy.AddDecision(
                 new RSIPredictor(new RSIIndicator(), decisionMaker, (RSIParameterVariation)strategyParameters.Get("RSI"))
             )
-            .AddEffect(new MartinGaleEffect(strategyParameters))
             ;
 
             return tradingStrategy;

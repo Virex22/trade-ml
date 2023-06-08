@@ -5,10 +5,12 @@ namespace App.Entity
     public class Wallet
     {
         public decimal Balance { get; private set; }
+        public decimal InitialBalance { get; }
 
         public Wallet(decimal initialBalance)
         {
             this.Balance = initialBalance;
+            this.InitialBalance = initialBalance;
         }
 
         public void Deposit(decimal amount)
