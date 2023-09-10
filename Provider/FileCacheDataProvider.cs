@@ -8,14 +8,13 @@ namespace App.Provider
 
         public static void Init()
         {
-            string path = Config.GetInstance().Get<string>("cachePath");
+            string path = ConfigProvider.GetConfig().Cache.CachePath;
             Directory.CreateDirectory(path);
         }
 
         public static List<Candle>? GetCache(string key)
         {
-            Config config = Config.GetInstance();
-            string cachePath = config.Get<string>("cachePath");
+            string cachePath = ConfigProvider.GetConfig().Cache.CachePath;
             string filePath = Path.Combine(cachePath, key + extension);
 
             if (!File.Exists(filePath))
@@ -37,8 +36,7 @@ namespace App.Provider
 
         public static void SetCache(string key, List<Candle> candles)
         {
-            Config config = Config.GetInstance();
-            string path = config.Get<string>("cachePath") + key + extension;
+            string path = ConfigProvider.GetConfig().Cache.CachePath + key + extension;
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(candles);
             File.WriteAllText(path, json);
         }

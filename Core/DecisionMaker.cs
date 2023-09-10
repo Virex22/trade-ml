@@ -4,6 +4,7 @@ using App.Core.Predictor;
 using App.Entity;
 using App.Enumerator;
 using App.Interface;
+using App.Provider;
 using System.Diagnostics;
 
 namespace App.Core
@@ -109,8 +110,8 @@ namespace App.Core
 
         private decimal CalculateAmountToTrade()
         {
-            bool baseTradeOnLostPercentage = Config.GetInstance().Get<bool>("baseTradeOnLostPercentage");// ex : true
-            decimal lostPercentage = Config.GetInstance().Get<decimal>("lostPercentage");// ex : 0.01
+            bool baseTradeOnLostPercentage = ConfigProvider.GetConfig().BaseTradeOnLostPercentage;
+            decimal lostPercentage = ConfigProvider.GetConfig().LostPercentage;
             if (!baseTradeOnLostPercentage)
             {
                 decimal amountToTrade = GlobalParameterVariation.TradeAmountPercentage * Wallet.Balance / 100;

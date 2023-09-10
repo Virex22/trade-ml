@@ -17,16 +17,16 @@ namespace App.Provider
 
         private CacheDataProvider()
         {
-            Config config = Config.GetInstance();
-            if (config.Get<ECache>("cacheType") == ECache.File)
+            Config config = ConfigProvider.GetConfig();
+            if (config.Cache.CacheType == ECache.File)
                 FileCacheDataProvider.Init();
         }
 
         public List<Candle>? GetCache(string key)
         {
             key = this.NormalizeKey(key);
-            Config config = Config.GetInstance();
-            switch (config.Get<ECache>("cacheType"))
+            Config config = ConfigProvider.GetConfig();
+            switch (config.Cache.CacheType)
             {
                 case ECache.File:
                     return FileCacheDataProvider.GetCache(key);
@@ -40,8 +40,8 @@ namespace App.Provider
         public void SetCache(string key, List<Candle> candles)
         {
             key = this.NormalizeKey(key);
-            Config config = Config.GetInstance();
-            switch (config.Get<ECache>("cacheType"))
+            Config config = ConfigProvider.GetConfig();
+            switch (config.Cache.CacheType)
             {
                 case ECache.File:
                     FileCacheDataProvider.SetCache(key, candles);

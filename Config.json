@@ -1,9 +1,11 @@
 ﻿{
   "symbol": "BTCUSDT",
   "interval": "5m",
-  "cacheType": "File",
-  "cachePath": "data/binance/cache/",
-  "reportPath":  "data/report/",
+  "cache": {
+    "cacheType": "File",
+    "cachePath": "data/binance/cache/"
+  },
+  "reportPath": "data/report/",
   "testIntervalDay": 10,
   "variationAmplitudeCoef": 3,
   "initialAmount": 10000,

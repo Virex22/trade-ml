@@ -1,5 +1,6 @@
 ﻿using App.Entity;
 using App.Interface;
+using App.Provider;
 
 namespace App.Core.Parameters
 {
@@ -10,7 +11,7 @@ namespace App.Core.Parameters
 
         public decimal DeriveDecimal(decimal number, decimal step, decimal amplitude, decimal min = 0, decimal max = 100)
         {
-            amplitude = amplitude * Config.GetInstance().Get<decimal>("variationAmplitudeCoef");
+            amplitude = amplitude * ConfigProvider.GetConfig().VariationAmplitudeCoef;
 
             decimal variation = CalculateRandomVariation(amplitude);
             decimal derivedValue = number + step * variation;

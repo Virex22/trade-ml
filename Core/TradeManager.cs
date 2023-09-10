@@ -1,5 +1,6 @@
 ﻿using App.Core.DataSet;
 using App.Entity;
+using App.Provider;
 
 namespace App.Core
 {
@@ -23,7 +24,7 @@ namespace App.Core
             if (!IsEligible(type))
                 return;
 
-            decimal feePercent = Config.GetInstance().Get<decimal>("plateformFeePercentage");
+            decimal feePercent = ConfigProvider.GetConfig().PlateformFeePercentage;
             if (feePercent < 0)
                 feePercent = 0;
 

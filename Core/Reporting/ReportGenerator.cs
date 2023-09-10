@@ -1,5 +1,6 @@
 ﻿using App.Core.Parameters;
 using App.Entity;
+using App.Provider;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace App.Core.Reporting
 
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(report, Newtonsoft.Json.Formatting.Indented);
 
-            string path = Path.Combine(Config.GetInstance().Get<string>("reportPath"), DateTime.Now.ToString("yyyyMMdd"));
+            string path = Path.Combine(ConfigProvider.GetConfig().ReportPath, DateTime.Now.ToString("yyyyMMdd"));
             string fileName = "report_" + DateTime.Now.ToString("HHmmss") + ".json";
             string fullPath = Path.Combine(path, fileName);
 

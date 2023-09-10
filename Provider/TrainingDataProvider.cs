@@ -36,7 +36,7 @@ namespace App.Provider
         {
             DateTimeOffset startTimestamp = new DateTimeOffset(day.Year, day.Month, day.Day, 0, 0, 0, TimeSpan.Zero);
             DateTimeOffset endTimestamp = new DateTimeOffset(day.Year, day.Month, day.Day, 23, 59, 59, TimeSpan.Zero);
-            string key = $"DayCandles_{Config.GetInstance().Get<string>("interval")}_{startTimestamp:yyyy MM dd}";
+            string key = $"DayCandles_{ConfigProvider.GetConfig().Interval}_{startTimestamp:yyyy MM dd}";
             CacheDataProvider cacheDataProvider = CacheDataProvider.getInstance();
             List<Candle>? cache = cacheDataProvider.GetCache(key);
             if (cache != null)
@@ -64,10 +64,10 @@ namespace App.Provider
 
         private string BuildUrl(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp)
         {
-            Config config = Config.GetInstance();
+            Config config = ConfigProvider.GetConfig();
 
-            return _url.Replace("{interval}", config.Get<string>("interval"))
-                .Replace("{symbol}", config.Get<string>("symbol"))
+            return _url.Replace("{interval}", config.Interval)
+                .Replace("{symbol}", config.Symbol)
                 .Replace("{start_timestamp}", startTimestamp.ToUnixTimeMilliseconds().ToString())
                 .Replace("{end_timestamp}", endTimestamp.ToUnixTimeMilliseconds().ToString());
         }

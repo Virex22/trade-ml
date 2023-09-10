@@ -19,7 +19,7 @@ namespace App.Core.DataSet
 
         public override void Start()
         {
-            int initialIndex = Config.GetInstance().Get<int>("histMinDataBufferLen");
+            int initialIndex = ConfigProvider.GetConfig().HistMinDataBufferLen;
 
             if (this.Data.Count < initialIndex)
                 throw new InvalidOperationException("Not enough data to start the simulation. Please diminuate the histMinDataBufferLen parameter in the config file.");

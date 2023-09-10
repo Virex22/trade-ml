@@ -1,5 +1,6 @@
 ﻿using App.Core.Parameters;
 using App.Entity;
+using App.Provider;
 
 namespace App.Core.Reporting
 {
@@ -7,13 +8,13 @@ namespace App.Core.Reporting
     {
         public SimulationReportData()
         {
-            PlateformFeePercentage = Config.GetInstance().Get<decimal>("plateformFeePercentage");
+            PlateformFeePercentage = ConfigProvider.GetConfig().PlateformFeePercentage;
         }
 
-        public TradingSimulationResult Result { get; set; }
-        public List<Trade> Trades { get; set; }
+        public TradingSimulationResult Result { get; set; } = new TradingSimulationResult();
+        public List<Trade> Trades { get; set; } = new List<Trade>();        
         public decimal InitialBalance { get; set; }
-        public StrategyParameters StrategyParameters { get; set; }
+        public StrategyParameters StrategyParameters { get; set; } = new StrategyParameters();
         public decimal PlateformFeePercentage { get; }
     }
 }

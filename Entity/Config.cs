@@ -1,61 +1,27 @@
 ﻿using App.Enumerator;
-using Newtonsoft.Json;
 
 
 namespace App.Entity
 {
     public class Config
     {
-        private dynamic config;
-        private static Config? _instance = null;
+        public string Symbol { get; set; } = "";
+        public string Interval { get; set; } = "";
+        public CacheConfig Cache { get; set; } = new CacheConfig();
+        public string ReportPath { get; set; } = "";
+        public int TestIntervalDay { get; set; } = 0;
+        public int VariationAmplitudeCoef { get; set; } = 0;
+        public decimal InitialAmount { get; set; } = 0.0m;
+        public decimal BasedTradeAmountPercentage { get; set; } = 0.0m;
+        public decimal PlateformFeePercentage { get; set; } = 0.0m;
+        public int HistMinDataBufferLen { get; set; } = 0;
+        public bool BaseTradeOnLostPercentage { get; set; } = false;
+        public decimal LostPercentage { get; set; } = 0.0m;
+    }
 
-        private Config()
-        {
-            LoadConfigFromFile();
-            ConfigTreatment();
-        }
-
-        private void LoadConfigFromFile()
-        {
-            string configFilePath = @"Config.json";
-
-            if (!File.Exists(configFilePath))
-                throw new System.Exception("Config file not found");
-
-            string json = File.ReadAllText(configFilePath);
-            this.config = JsonConvert.DeserializeObject<dynamic>(json) ?? throw new System.Exception("Config file is empty");
-        }
-
-        private void ConfigTreatment()
-        {
-            try
-            {
-                string stringCacheType = config.cacheType ?? "None";
-                config.cacheType = Enum.Parse<ECache>(stringCacheType);
-            }
-            catch (System.Exception)
-            {
-                throw new System.Exception("cacheType is not valid");
-            }
-        }
-
-        public static Config GetInstance()
-        {
-            if (_instance == null)
-                _instance = new Config();
-
-            return _instance;
-        }
-
-        public void Debug()
-        {
-            foreach (var item in config)
-                Console.WriteLine(item);
-        }
-
-        public T Get<T>(string key)
-        {
-            return (T)config[key];
-        }
+    public class CacheConfig
+    {
+        public ECache CacheType { get; set; } = ECache.None;
+        public string CachePath { get; set; } = "";
     }
 }

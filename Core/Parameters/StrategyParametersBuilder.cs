@@ -1,5 +1,6 @@
 ﻿using App.Core.Parameters.ParameterVariations;
 using App.Entity;
+using App.Provider;
 
 namespace App.Core.Parameters
 {
@@ -9,7 +10,7 @@ namespace App.Core.Parameters
         {
             Random random = new Random();
             StrategyParameters parameters = new StrategyParameters();
-            decimal basedTradeAmountPercentage = Config.GetInstance().Get<decimal>("basedTradeAmountPercentage");
+            decimal basedTradeAmountPercentage = ConfigProvider.GetConfig().BasedTradeAmountPercentage;
 
             parameters.Add("Global", new GlobalParameterVariation()
             {
