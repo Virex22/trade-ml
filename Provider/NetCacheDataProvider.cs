@@ -11,7 +11,14 @@ namespace App.Provider
         public static List<Candle>? GetCache(string key)
         {
             if (!cache.Contains(key))
+            {
+                if (ConfigProvider.GetConfig().consoleMessage.cache)
+                    Console.WriteLine("Cache not found for key: " + key);
                 return null;
+            }
+
+            if (ConfigProvider.GetConfig().consoleMessage.cache)
+                Console.WriteLine("Successfully loaded cache for key: " + key);
 
             return (List<Candle>)cache[key];
         }

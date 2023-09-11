@@ -5,6 +5,13 @@
     "cacheType": "File",
     "cachePath": "data/binance/cache/"
   },
+  "consoleMessage": {
+    "cache": true,
+    "config": true,
+    "tradeResult": true,
+    "executionTime": true,
+    "reportPath": true
+  },
   "reportPath": "data/report/",
   "testIntervalDay": 10,
   "variationAmplitudeCoef": 3,

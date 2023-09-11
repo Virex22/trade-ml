@@ -8,6 +8,7 @@ namespace App.Entity
         public string Symbol { get; set; } = "";
         public string Interval { get; set; } = "";
         public CacheConfig Cache { get; set; } = new CacheConfig();
+        public ConsoleMessageConfig consoleMessage { get; set; } = new ConsoleMessageConfig();
         public string ReportPath { get; set; } = "";
         public int TestIntervalDay { get; set; } = 0;
         public int VariationAmplitudeCoef { get; set; } = 0;
@@ -23,5 +24,14 @@ namespace App.Entity
     {
         public ECache CacheType { get; set; } = ECache.None;
         public string CachePath { get; set; } = "";
+    }
+
+    public class ConsoleMessageConfig
+    {
+        public bool cache { get; set; } = true;
+        public bool tradeResult { get; set; } = true;
+        public bool executionTime { get; set; } = true;
+        public bool config { get; set; } = true;
+        public bool reportPath { get; set; } = true;
     }
 }

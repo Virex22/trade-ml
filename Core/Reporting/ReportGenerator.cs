@@ -33,7 +33,8 @@ namespace App.Core.Reporting
             Directory.CreateDirectory(path);
 
             File.WriteAllText(fullPath, json);
-            Console.WriteLine("Report generated at " + fullPath);
+            if (ConfigProvider.GetConfig().consoleMessage.reportPath)
+                Console.WriteLine("Report generated at " + fullPath);
 
             return report;
         }

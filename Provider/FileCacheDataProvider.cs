@@ -19,16 +19,17 @@ namespace App.Provider
 
             if (!File.Exists(filePath))
             {
-                Console.WriteLine("Cache not found for key: " + key);
+                if (ConfigProvider.GetConfig().consoleMessage.cache)
+                    Console.WriteLine("Cache not found for key: " + key);
                 return null;
             }
 
             string json = File.ReadAllText(filePath);
             List<Candle>? result = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Candle>>(json);
 
-            if (result != null)
+            if (result != null && ConfigProvider.GetConfig().consoleMessage.cache)
                 Console.WriteLine("Successfully loaded cache for key: " + key);
-            else
+            else if (ConfigProvider.GetConfig().consoleMessage.cache)
                 Console.WriteLine("Failed to load cache for key: " + key);
 
             return result;
