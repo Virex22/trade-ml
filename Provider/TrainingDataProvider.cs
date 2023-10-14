@@ -3,13 +3,18 @@ using App.Entity;
 using Newtonsoft.Json;
 using App.Adapter;
 using App.Exception;
+using App.Provider.API;
 
 namespace App.Provider
 {
     public class TrainingDataProvider
     {
-        private string _url = "https://api.binance.com/api/v3/klines?symbol={symbol}&interval={interval}&startTime={start_timestamp}&endTime={end_timestamp}&limit=1000";
+        private AbstractAPI api;
 
+        public TrainingDataProvider()
+        {
+            this.api = new BinanceAPI();
+        }
         /**
          * get random day candles values from 00:00 to 23:59
          */
@@ -44,32 +49,9 @@ namespace App.Provider
                 return cache;
             }
 
-            string url = BuildUrl(startTimestamp, endTimestamp);
-            string result = GetResult(url);
-
-            List<dynamic> dayData;
-            try
-            {
-                dayData = JsonConvert.DeserializeObject<List<dynamic>>(result) ?? new List<dynamic>();
-            }
-            catch (System.Exception e)
-            {
-                throw new ApiException(e.Message, result);
-            }
-
-            List<Candle> candles = CandleAdapter.AdaptBinanceApiListResultToCandleList(dayData);
+            List<Candle> candles = api.Call(startTimestamp, endTimestamp);
             cacheDataProvider.SetCache(key, candles);
             return candles;
-        }
-
-        private string BuildUrl(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp)
-        {
-            Config config = ConfigProvider.GetConfig();
-
-            return _url.Replace("{interval}", config.Interval)
-                .Replace("{symbol}", config.Symbol)
-                .Replace("{start_timestamp}", startTimestamp.ToUnixTimeMilliseconds().ToString())
-                .Replace("{end_timestamp}", endTimestamp.ToUnixTimeMilliseconds().ToString());
         }
 
         private string GetResult(string url)

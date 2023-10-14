@@ -20,7 +20,7 @@ namespace App.Provider.API
         
         abstract protected String buildUrl(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp);
 
-        abstract protected List<Candle> AdaptApiResultToCandleList(List<dynamic>);
+        abstract protected List<Candle> AdaptApiResultToCandleList(List<dynamic> result);
 
         public List<Candle> Call(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp)
         {
