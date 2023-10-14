@@ -5,7 +5,6 @@
         public ApiException(string message, string result) : base(GenerateMessage(message,result))
         {
             // call parent constructor
-
         }
 
         private static string GenerateMessage(string message, string result)
